@@ -21,15 +21,32 @@ class ManagerController extends Controller
     }
 
     //Update warehouse
-    public function update(Request $request, $id) {
+    public function update(Request $request) {
 
-        $manager = Warehouse::findOrFail($id);
-        $manager->longitude = $request->input('mlng');
-        $manager->latitude = $request->input('mlat');
-        
-        if ($manager->save()) {
-            return new WarehouseResource($manager);
+        $manager = Manager::find(1);
+
+        $this->validate($request, [
+            'longitude' => 'required',
+            'latitude' => 'required'
+        ]);
+
+        if ($manager == null) {
+            
+            $manager = new Manager();
+            $manager->id = 1;
+            $manager->longitude = $request->longitude;
+            $manager->latitude = $request->latitude;
+            $manager->save();
+
+        } else {
+            $manager->longitude = $request -> longitude;
+            $manager->latitude = $request -> latitude;
+            $manager->save();
         }
+
+        
+
+        return new ManagerResource($manager);
     }
 
     

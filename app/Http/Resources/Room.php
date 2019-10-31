@@ -14,6 +14,11 @@ class Room extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'temperature' => $this->temperature,
+            'warehouseid' => $this->warehouseid
+        ];
     }
 }

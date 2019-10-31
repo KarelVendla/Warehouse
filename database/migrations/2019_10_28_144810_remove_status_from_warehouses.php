@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Rooms extends Migration
+class RemoveStatusFromWarehouses extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class Rooms extends Migration
      */
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->integer('temperature');
-            $table->integer('warehouseid')->default(0);
-            $table->timestamps();
+        Schema::table('warehouses', function (Blueprint $table) {
+            $table->dropColumn('Status');
         });
     }
 
@@ -29,6 +25,8 @@ class Rooms extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('warehouses', function (Blueprint $table) {
+            $table->string('Status');
+        });
     }
 }

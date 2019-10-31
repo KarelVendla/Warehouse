@@ -24,9 +24,4 @@ class Warehouse extends JsonResource
             'status' => $this->status
         ];
     }
-
-    public function with($request)
-    {
-        
-    }
 }

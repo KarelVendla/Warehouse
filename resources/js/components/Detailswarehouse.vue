@@ -1,54 +1,100 @@
 <template>
-    <div id="detailswarehouse" class="container">
-
-    <h1>Warehouse</h1>
-    <form v-on:submit:prevent="addWarehouse">
-    <table class="table">
-      <tr>
-        <td><button v:on:click="saveWarehouse()" class="btn btn-danger">Save</button></td>
-      </tr>
-      <tr>
-        <td>Name</td>
-      </tr>
-      <tr>
-        <td><input v-model="wname" type="text" id="wnameinput" class="form-control" placeholder="Name"></td>
-      </tr>
-        <tr>
-        <td>Longitude</td>
-      </tr>
-      <tr>
-        <td><input v-model="wlng" type="text" id="wlonginput" class="form-control" placeholder="Longitude"></td>
-      </tr>
-      <tr>
-        <td>Latitude</td>
-      </tr>
-      <tr>
-        <td><input v-model="wlat" type="text" id="wlatinput" class="form-control" placeholder="Latitude"></td>
-      </tr>
-    </table>
-    </form>
-
-    <br>
+    <div>
     
-    <table>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Temperature</th>
-            <th scope="col"></th>
-        </tr>
-        <tr v-for="(room) in Rooms" v-bind:key="room.id">
-            <td>{{warehouse.name}}</td>
-            <td>{{warehouse.temperature}}</td>
-            <td><button v:on:click="deleteRoom()" class="btn btn-danger">Delete</button></td>
-        </tr>
-    </table>
-
-
+        <h1>Warehouse</h1>
+        <form method="GET">
+    
+            <table class="table">
+    
+                <tr>
+    
+                    <td>
+    
+                        <input type="submit" @click.prevent="saveWarehouse()" class="btn btn-danger" value="Save"/>
+    
+                    </td>
+    
+                </tr>
+    
+                <tr>
+    
+                    <td>Name</td>
+                </tr>
+    
+                <tr>
+    
+                    <td>
+    
+                        <input v-model="warehouse.name" type="text" class="form-control" placeholder="Name" />
+    
+                    </td>
+    
+                </tr>
+    
+                <tr>
+    
+                    <td>Longitude</td>
+    
+                </tr>
+    
+                <tr>
+    
+                    <td>
+    
+                        <input v-model.number="warehouse.longitude" type="number" step="any" class="form-control" placeholder="Longitude" />
+    
+                    </td>
+    
+                </tr>
+    
+                <tr>
+    
+                    <td>Latitude</td>
+    
+                </tr>
+    
+                <tr>
+    
+                    <td>
+    
+                        <input v-model.number="warehouse.latitude" type="number" step="any" class="form-control" placeholder="Latitude" />
+    
+                    </td>
+    
+                </tr>
+    
+            </table>
+    
+        </form>
+    
     </div>
 </template>
 
 <script>
 export default {
-    
+    data() {
+
+        return {
+            warehouses: [],
+            warehouse: {
+                id: this.$route.params.warehouseID,
+                name: '',
+                longitude: '',
+                latitude: ''
+            }
+        };
+    },
+    methods: {
+        saveWarehouse() {
+            axios.put('/api/warehouse/' + this.$data.warehouse.id, this.$data.warehouse)
+                .then(response => {
+                    alert('Warehouse updated')
+                    console.log(response);
+                })
+                .catch(error => {
+                    console.log(error.response)
+                });
+        } 
+    }
 }
 </script>

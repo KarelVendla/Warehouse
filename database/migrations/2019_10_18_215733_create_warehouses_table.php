@@ -18,7 +18,6 @@ class CreateWarehousesTable extends Migration
             $table->string('name');
             $table->double('longitude', 10, 6)->default(0);
             $table->double('latitude', 10, 6)->default(0);
-            $table->string('status');
             $table->timestamps();
         });
     }

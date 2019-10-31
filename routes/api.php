@@ -23,12 +23,15 @@ Route::get('rooms', 'RoomsController@index');
 Route::get('warehouses', 'WarehouseController@index');
 Route::get('managers','ManagerController@index');
 
+//Get single warehouse
+Route::get('warehouse/{id}','WarehouseController@show');
+
 // Create new warehouse/room
 Route::post('room', 'RoomsController@store');
 Route::post('warehouse','WarehouseController@store');
+Route::post('manager', 'ManagerController@update');
 
 //Update warehouse/manager
-Route::put('manager/{id}', 'ManagerController@update');
 Route::put('warehouse/{id}','WarehouseController@update');
 
 //Delete warehouse/room

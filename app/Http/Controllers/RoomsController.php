@@ -25,10 +25,9 @@ class RoomsController extends Controller
         //Get room
         $room = rooms::findOrFail($id);
 
-        
-        if ($room->delete()) {
-            return new RoomResource($room);
-        }
+        $room->forceDelete();
+        return new RoomResource($room);
+
     }
 
     //Add new room
@@ -36,12 +35,11 @@ class RoomsController extends Controller
 
         $room = new rooms;
 
-        $room->name = $request->input('name');
-        $room->temperature = $request->input('temperature');
-
-        if ($room->save()) {
-            return new WarehouseResource($room);
-        }
+        $room->name = $request->name;
+        $room->temperature = rand(21, 100);
+        $room->warehouseid = $request->warehouseid;
+        $room->save();
+        return new RoomResource($room);
     
     }
 

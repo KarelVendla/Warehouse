@@ -21,16 +21,21 @@ class WarehouseController extends Controller
        return WarehouseResource::collection($warehouses);
     }
 
+    public function show(Warehouse $id) {
+
+
+        $warehouse = Warehouse::findOrFail($id)->first()->toArray();
+        return new WarehouseResource($warehouse);
+    }
+
 
     //Add new warehouse
     public function store(Request $request) { 
 
-        $warehouse = new Warehouse;
-
-        $warehouse->name = $request->input('name');
-        $warehouse->longitude = $request->input('longitude');
-        $warehouse->latitude = $request->input('latitude');
-        $warehouse->status = $request->input('status');
+        $warehouse = new Warehouse();
+        $warehouse->name = $request->name;
+        $warehouse->longitude = $request->longitude;
+        $warehouse->latitude = $request->latitude;
 
         if ($warehouse->save()) {
             return new WarehouseResource($warehouse);
@@ -42,13 +47,18 @@ class WarehouseController extends Controller
     //Update warehouse
     public function update(Request $request, $id) {
 
-        $warehouse = Warehouse::findOrFail($id);
-        $warehouse->name = $request->input('wname');
-        $warehouse->longitude = $request->input('wlng');
-        $warehouse->latitude = $request->input('wlat');
-        
-        if ($warehouse->save()) {
-            return new WarehouseResource($warehouse);
-        }
+        $this->validate($request, [
+            'name' => 'required',
+            'longitude' => 'required',
+            'latitude' => 'required'
+        ]);
+
+        $warehouse = Warehouse::find($id);
+        $warehouse->name = $request->name;
+        $warehouse->longitude = $request->longitude;
+        $warehouse->latitude = $request->latitude;
+        $warehouse->save();
+
+        return new WarehouseResource($warehouse);
     }
 }
