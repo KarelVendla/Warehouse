@@ -86,12 +86,14 @@ export default {
                 warehouseid: this.$route.params.warehouseID
             },
             warehouse: {
+                warehouseStatus: '',
                 warehouseID: this.$route.params.warehouseID
             }
         }
     },
     created() {
-        this.fetchrooms()
+        this.fetchrooms();
+        this.WarehouseStatus();
     },
     methods: {
         fetchrooms() {
@@ -117,11 +119,40 @@ export default {
                     alert('Room deleted')
                     console.log("Successfully deleted")
                 });
+        },
+        WarehouseStatus() {
+
+
+            //Return max temperature of object, if the objects warehouseid == warehouseID 
+
+            //Returns infinity
+            var maxTemp = Math.max.apply(Math,this.rooms.map(function(o){return o.temperature;}))
+
+            console.log(maxTemp);
+
+            //If maxTemp ... set warehouseStatus
+            if (maxTemp >= 100) {
+                this.$data.warehouse.warehouseStatus = "HIGH";
+                console.log('status HiGH');
+            } else if (maxTemp >= 55) {
+                this.$data.warehouse.warehouseStatus = "MEDIUM";
+                console.log('status MEDIUM');
+                
+            } else if (maxTemp < 55) {
+                this.$data.warehouse.warehouseStatus = "OK";
+                console.log('status OK');
+                
+            }
         }
+
     },
     computed: {
+
+        //Return rooms that have warehouseid == warehouseID
         WarehouseRooms: function() {
-            return this.rooms.filter(room => room.warehouseid == this.warehouse.warehouseID)
+            var WRooms = this.rooms.filter(room => room.warehouseid == this.warehouse.warehouseID);
+            return WRooms;
+
         }
     }
 }

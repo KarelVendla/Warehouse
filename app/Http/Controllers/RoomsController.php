@@ -36,7 +36,7 @@ class RoomsController extends Controller
         $room = new rooms;
 
         $room->name = $request->name;
-        $room->temperature = rand(21, 100);
+        $room->temperature = rand(21, 125);
         $room->warehouseid = $request->warehouseid;
         $room->save();
         return new RoomResource($room);

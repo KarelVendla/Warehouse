@@ -14,7 +14,7 @@
                 <td>{{ warehouse.name }}</td>
                 <td>{{ warehouse.longitude }}</td>
                 <td>{{ warehouse.latitude }}</td>
-                <td></td>
+                <td>{{ warehouse.status }}</td>
                 <td><router-link :to="'/details/' + warehouse.id">Details</router-link></td>
             </tr>
         </table>
@@ -90,8 +90,10 @@ export default {
                 id: '',
                 name: '',
                 longitude: '',
-                latitude: ''
-            }
+                latitude: '',
+                status: ''
+            },
+            url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false&geometries=polyline&steps=true'
         };
     },
     //Do something when component is created
@@ -116,9 +118,10 @@ export default {
                 .catch(error => {
                     console.log(error.response)
                 });
+        },
+        Distance() {
+            //Get distance between manager and warehouse if
         }
-
-
     }
 };
 </script>

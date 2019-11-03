@@ -36,6 +36,7 @@ class WarehouseController extends Controller
         $warehouse->name = $request->name;
         $warehouse->longitude = $request->longitude;
         $warehouse->latitude = $request->latitude;
+        $warehouse->status = $request->status;
 
         if ($warehouse->save()) {
             return new WarehouseResource($warehouse);
@@ -57,6 +58,7 @@ class WarehouseController extends Controller
         $warehouse->name = $request->name;
         $warehouse->longitude = $request->longitude;
         $warehouse->latitude = $request->latitude;
+        $warehouse->status = $request->status;
         $warehouse->save();
 
         return new WarehouseResource($warehouse);

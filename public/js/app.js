@@ -2108,12 +2108,14 @@ __webpack_require__.r(__webpack_exports__);
         warehouseid: this.$route.params.warehouseID
       },
       warehouse: {
+        warehouseStatus: '',
         warehouseID: this.$route.params.warehouseID
       }
     };
   },
   created: function created() {
     this.fetchrooms();
+    this.WarehouseStatus();
   },
   methods: {
     fetchrooms: function fetchrooms() {
@@ -2137,15 +2139,36 @@ __webpack_require__.r(__webpack_exports__);
         alert('Room deleted');
         console.log("Successfully deleted");
       });
+    },
+    WarehouseStatus: function WarehouseStatus() {
+      //Return max temperature of object, if the objects warehouseid == warehouseID 
+      //Returns infinity
+      var maxTemp = Math.max.apply(Math, this.rooms.map(function (o) {
+        return o.temperature;
+      }));
+      console.log(maxTemp); //If maxTemp ... set warehouseStatus
+
+      if (maxTemp >= 100) {
+        this.$data.warehouse.warehouseStatus = "HIGH";
+        console.log('status HiGH');
+      } else if (maxTemp >= 55) {
+        this.$data.warehouse.warehouseStatus = "MEDIUM";
+        console.log('status MEDIUM');
+      } else if (maxTemp < 55) {
+        this.$data.warehouse.warehouseStatus = "OK";
+        console.log('status OK');
+      }
     }
   },
   computed: {
+    //Return rooms that have warehouseid == warehouseID
     WarehouseRooms: function WarehouseRooms() {
       var _this2 = this;
 
-      return this.rooms.filter(function (room) {
+      var WRooms = this.rooms.filter(function (room) {
         return room.warehouseid == _this2.warehouse.warehouseID;
       });
+      return WRooms;
     }
   }
 });
@@ -2252,8 +2275,10 @@ __webpack_require__.r(__webpack_exports__);
         id: '',
         name: '',
         longitude: '',
-        latitude: ''
-      }
+        latitude: '',
+        status: ''
+      },
+      url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false&geometries=polyline&steps=true'
     };
   },
   //Do something when component is created
@@ -2276,6 +2301,8 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error.response);
       });
+    },
+    Distance: function Distance() {//Get distance between manager and warehouse if
     }
   }
 });
@@ -38082,7 +38109,7 @@ var render = function() {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(warehouse.latitude))]),
               _vm._v(" "),
-              _c("td"),
+              _c("td", [_vm._v(_vm._s(warehouse.status))]),
               _vm._v(" "),
               _c(
                 "td",
@@ -53646,14 +53673,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************************!*\
   !*** ./resources/js/components/Warehouses.vue ***!
   \************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Warehouses_vue_vue_type_template_id_e7377a8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Warehouses.vue?vue&type=template&id=e7377a8a& */ "./resources/js/components/Warehouses.vue?vue&type=template&id=e7377a8a&");
 /* harmony import */ var _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Warehouses.vue?vue&type=script&lang=js& */ "./resources/js/components/Warehouses.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -53683,7 +53711,7 @@ component.options.__file = "resources/js/components/Warehouses.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/components/Warehouses.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
