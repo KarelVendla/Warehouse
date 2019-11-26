@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\warehouse;
+use App\rooms;
 use App\Http\Resources\Warehouse as WarehouseResource;
 
 
@@ -36,7 +37,7 @@ class WarehouseController extends Controller
         $warehouse->name = $request->name;
         $warehouse->longitude = $request->longitude;
         $warehouse->latitude = $request->latitude;
-        $warehouse->status = $request->status;
+        $warehouse->status = '-';
 
         if ($warehouse->save()) {
             return new WarehouseResource($warehouse);
@@ -48,17 +49,10 @@ class WarehouseController extends Controller
     //Update warehouse
     public function update(Request $request, $id) {
 
-        $this->validate($request, [
-            'name' => 'required',
-            'longitude' => 'required',
-            'latitude' => 'required'
-        ]);
-
         $warehouse = Warehouse::find($id);
         $warehouse->name = $request->name;
         $warehouse->longitude = $request->longitude;
         $warehouse->latitude = $request->latitude;
-        $warehouse->status = $request->status;
         $warehouse->save();
 
         return new WarehouseResource($warehouse);

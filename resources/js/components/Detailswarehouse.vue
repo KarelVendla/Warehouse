@@ -73,7 +73,6 @@
 <script>
 export default {
     data() {
-
         return {
             warehouses: [],
             warehouse: {
@@ -86,7 +85,7 @@ export default {
     },
     methods: {
         saveWarehouse() {
-            axios.put('/api/warehouse/' + this.$data.warehouse.id, this.$data.warehouse)
+            axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse)
                 .then(response => {
                     alert('Warehouse updated')
                     console.log(response);

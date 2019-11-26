@@ -43,5 +43,10 @@ class RoomsController extends Controller
     
     }
 
+    public function show($warehouseid) {
+        $warehouseRooms = rooms::all()->where('warehouseid', $warehouseid);
+        //return new RoomResource($warehouseRooms);
+        return RoomResource::collection($warehouseRooms);
+    }
     
 }

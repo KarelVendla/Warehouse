@@ -30,7 +30,7 @@
     
                     </div>
                     <div class="modal-body">
-                        <form @submit="AddWarehouse()" method="GET">
+                        <form method="GET">
     
                             <table class="table">
                                 <tr>
@@ -67,9 +67,7 @@
     
                                 </tr>
                                 <tr>
-    
-                                    <td><button type="submit" class="btn btn-danger">Save</button></td>
-    
+                                    <td><input type="submit" @click.prevent="AddWarehouse()" class="btn btn-danger" value="Save" data-dismiss="modal"/></td>
                                 </tr>
                             </table>
                         </form>
@@ -85,6 +83,7 @@
 export default {
     data() {
         return {
+            isHidden: 'true',
             warehouses: [],
             warehouse: {
                 id: '',
@@ -92,8 +91,7 @@ export default {
                 longitude: '',
                 latitude: '',
                 status: ''
-            },
-            url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false&geometries=polyline&steps=true'
+            }
         };
     },
     //Do something when component is created
@@ -114,14 +112,19 @@ export default {
             axios.post('api/warehouse', this.$data.warehouse) 
             .then(response => {
                     console.log(response);
+                    this.fetchWarehouses();
                 })
                 .catch(error => {
-                    console.log(error.response)
-                });
-        },
-        Distance() {
-            //Get distance between manager and warehouse if
+                    console.log(error.response);
+                });    
         }
-    }
+    },
+    computed: {
+        Warning: function() {
+            var Temp = this.warehouses.filter(warehouse => warehouse.status == 'HIGH');
+            this.isHidden = 'false';
+            
+        }
+    },
 };
 </script>

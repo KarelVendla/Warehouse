@@ -2091,12 +2091,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2108,6 +2102,7 @@ __webpack_require__.r(__webpack_exports__);
         warehouseid: this.$route.params.warehouseID
       },
       warehouse: {
+        warehouseTemp: '',
         warehouseStatus: '',
         warehouseID: this.$route.params.warehouseID
       }
@@ -2115,60 +2110,39 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {
     this.fetchrooms();
-    this.WarehouseStatus();
   },
   methods: {
     fetchrooms: function fetchrooms() {
       var _this = this;
 
-      fetch('/api/rooms').then(function (res) {
-        return res.json();
-      }).then(function (res) {
-        _this.rooms = res.data;
+      fetch('/api/rooms/' + this.warehouse.warehouseID).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        _this.rooms = response.data;
+      }).then(function (response) {
+        console.log(response);
       });
     },
     AddRoom: function AddRoom() {
+      var _this2 = this;
+
       axios.post('/api/room', this.$data.room).then(function (response) {
         console.log(response);
+
+        _this2.fetchrooms();
       })["catch"](function (error) {
         console.log(error.response);
       });
     },
     DeleteRoom: function DeleteRoom(id) {
+      var _this3 = this;
+
       axios["delete"]('/api/room/' + id).then(function (response) {
+        _this3.fetchrooms();
+
         alert('Room deleted');
         console.log("Successfully deleted");
       });
-    },
-    WarehouseStatus: function WarehouseStatus() {
-      //Return max temperature of object, if the objects warehouseid == warehouseID 
-      //Returns infinity
-      var maxTemp = Math.max.apply(Math, this.rooms.map(function (o) {
-        return o.temperature;
-      }));
-      console.log(maxTemp); //If maxTemp ... set warehouseStatus
-
-      if (maxTemp >= 100) {
-        this.$data.warehouse.warehouseStatus = "HIGH";
-        console.log('status HiGH');
-      } else if (maxTemp >= 55) {
-        this.$data.warehouse.warehouseStatus = "MEDIUM";
-        console.log('status MEDIUM');
-      } else if (maxTemp < 55) {
-        this.$data.warehouse.warehouseStatus = "OK";
-        console.log('status OK');
-      }
-    }
-  },
-  computed: {
-    //Return rooms that have warehouseid == warehouseID
-    WarehouseRooms: function WarehouseRooms() {
-      var _this2 = this;
-
-      var WRooms = this.rooms.filter(function (room) {
-        return room.warehouseid == _this2.warehouse.warehouseID;
-      });
-      return WRooms;
     }
   }
 });
@@ -2265,11 +2239,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      isHidden: 'true',
       warehouses: [],
       warehouse: {
         id: '',
@@ -2277,8 +2250,7 @@ __webpack_require__.r(__webpack_exports__);
         longitude: '',
         latitude: '',
         status: ''
-      },
-      url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false&geometries=polyline&steps=true'
+      }
     };
   },
   //Do something when component is created
@@ -2296,13 +2268,23 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     AddWarehouse: function AddWarehouse() {
+      var _this2 = this;
+
       axios.post('api/warehouse', this.$data.warehouse).then(function (response) {
         console.log(response);
+
+        _this2.fetchWarehouses();
       })["catch"](function (error) {
         console.log(error.response);
       });
-    },
-    Distance: function Distance() {//Get distance between manager and warehouse if
+    }
+  },
+  computed: {
+    Warning: function Warning() {
+      var Temp = this.warehouses.filter(function (warehouse) {
+        return warehouse.status == 'HIGH';
+      });
+      this.isHidden = 'false';
     }
   }
 });
@@ -37928,11 +37910,13 @@ var render = function() {
       [
         _vm._m(0),
         _vm._v(" "),
-        _vm._l(_vm.WarehouseRooms, function(room) {
+        _vm._l(_vm.rooms, function(room) {
           return _c("tr", { key: room.id }, [
             _c("td", [_vm._v(_vm._s(room.name))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(room.temperature))]),
+            _c("td", { staticClass: "text-center" }, [
+              _vm._v(_vm._s(room.temperature))
+            ]),
             _vm._v(" "),
             _c("td", [
               _c(
@@ -37999,7 +37983,11 @@ var render = function() {
                     _c("td", [
                       _c("input", {
                         staticClass: "btn btn-primary",
-                        attrs: { type: "submit", value: "Save" },
+                        attrs: {
+                          type: "submit",
+                          value: "Save",
+                          "data-dismiss": "modal"
+                        },
                         on: {
                           click: function($event) {
                             $event.preventDefault()
@@ -38138,134 +38126,136 @@ var render = function() {
             _vm._m(1),
             _vm._v(" "),
             _c("div", { staticClass: "modal-body" }, [
-              _c(
-                "form",
-                {
-                  attrs: { method: "GET" },
-                  on: {
-                    submit: function($event) {
-                      return _vm.AddWarehouse()
-                    }
-                  }
-                },
-                [
-                  _c("table", { staticClass: "table" }, [
-                    _vm._m(2),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.warehouse.name,
-                              expression: "warehouse.name"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: { type: "text", placeholder: "Name" },
-                          domProps: { value: _vm.warehouse.name },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.warehouse,
-                                "name",
-                                $event.target.value
-                              )
-                            }
+              _c("form", { attrs: { method: "GET" } }, [
+                _c("table", { staticClass: "table" }, [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.warehouse.name,
+                            expression: "warehouse.name"
                           }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(3),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.number",
-                              value: _vm.warehouse.longitude,
-                              expression: "warehouse.longitude",
-                              modifiers: { number: true }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", placeholder: "Name" },
+                        domProps: { value: _vm.warehouse.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "number",
-                            step: "any",
-                            placeholder: "Longitude"
+                            _vm.$set(_vm.warehouse, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.number",
+                            value: _vm.warehouse.longitude,
+                            expression: "warehouse.longitude",
+                            modifiers: { number: true }
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          step: "any",
+                          placeholder: "Longitude"
+                        },
+                        domProps: { value: _vm.warehouse.longitude },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.warehouse,
+                              "longitude",
+                              _vm._n($event.target.value)
+                            )
                           },
-                          domProps: { value: _vm.warehouse.longitude },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.warehouse,
-                                "longitude",
-                                _vm._n($event.target.value)
-                              )
-                            },
-                            blur: function($event) {
-                              return _vm.$forceUpdate()
-                            }
+                          blur: function($event) {
+                            return _vm.$forceUpdate()
                           }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(4),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.number",
-                              value: _vm.warehouse.latitude,
-                              expression: "warehouse.latitude",
-                              modifiers: { number: true }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.number",
+                            value: _vm.warehouse.latitude,
+                            expression: "warehouse.latitude",
+                            modifiers: { number: true }
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "number",
+                          step: "any",
+                          placeholder: "Latitude"
+                        },
+                        domProps: { value: _vm.warehouse.latitude },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            type: "number",
-                            step: "any",
-                            placeholder: "Latitude"
+                            _vm.$set(
+                              _vm.warehouse,
+                              "latitude",
+                              _vm._n($event.target.value)
+                            )
                           },
-                          domProps: { value: _vm.warehouse.latitude },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.warehouse,
-                                "latitude",
-                                _vm._n($event.target.value)
-                              )
-                            },
-                            blur: function($event) {
-                              return _vm.$forceUpdate()
-                            }
+                          blur: function($event) {
+                            return _vm.$forceUpdate()
                           }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(5)
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", [
+                      _c("input", {
+                        staticClass: "btn btn-danger",
+                        attrs: {
+                          type: "submit",
+                          value: "Save",
+                          "data-dismiss": "modal"
+                        },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.AddWarehouse()
+                          }
+                        }
+                      })
+                    ])
                   ])
-                ]
-              )
+                ])
+              ])
             ])
           ])
         ])
@@ -38324,20 +38314,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [_c("td", [_vm._v("Latitude")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [
-      _c("td", [
-        _c(
-          "button",
-          { staticClass: "btn btn-danger", attrs: { type: "submit" } },
-          [_vm._v("Save")]
-        )
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -53673,15 +53649,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************************!*\
   !*** ./resources/js/components/Warehouses.vue ***!
   \************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Warehouses_vue_vue_type_template_id_e7377a8a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Warehouses.vue?vue&type=template&id=e7377a8a& */ "./resources/js/components/Warehouses.vue?vue&type=template&id=e7377a8a&");
 /* harmony import */ var _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Warehouses.vue?vue&type=script&lang=js& */ "./resources/js/components/Warehouses.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Warehouses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -53711,7 +53686,7 @@ component.options.__file = "resources/js/components/Warehouses.vue"
 /*!*************************************************************************!*\
   !*** ./resources/js/components/Warehouses.vue?vue&type=script&lang=js& ***!
   \*************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
