@@ -49,10 +49,11 @@ class WarehouseController extends Controller
     //Update warehouse
     public function update(Request $request, $id) {
 
-        $warehouse = Warehouse::find($id);
-        $warehouse->name = $request->name;
-        $warehouse->longitude = $request->longitude;
-        $warehouse->latitude = $request->latitude;
+        $warehouse = Warehouse::findOrFail($id);
+        $warehouse->name = $request->filled('name') ? $request->input('name', $warehouse->name) : $warehouse->name;
+        $warehouse->longitude = $request->filled('longitude') ? $request->input('longitude', $warehouse->longitude) : $warehouse->longitude;
+        $warehouse->latitude = $request->filled('latitude') ? $request->input('latitude', $warehouse->latitude) : $warehouse->latitude;
+        $warehouse->status = $request->input('status', $warehouse->status);
         $warehouse->save();
 
         return new WarehouseResource($warehouse);

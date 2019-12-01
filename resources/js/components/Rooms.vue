@@ -1,6 +1,6 @@
 <template>
     <div>
-    
+        <h1>Rooms</h1>
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#addNew">Add Room</button>
     
         <table>  
@@ -80,9 +80,9 @@ export default {
                 warehouseid: this.$route.params.warehouseID
             },
             warehouse: {
-                warehouseTemp: '',
-                warehouseStatus: '',
-                warehouseID: this.$route.params.warehouseID
+                temperature: '',
+                status: '',
+                id: this.$route.params.warehouseID
             }
         };
     },
@@ -91,10 +91,11 @@ export default {
     },
     methods: {
         fetchrooms() {
-            fetch('/api/rooms/' + this.warehouse.warehouseID)
+            fetch('/api/rooms/' + this.warehouse.id)
                 .then(response => response.json())
                 .then(response => {
                     this.rooms = response.data;
+                    this.WarehouseTemperature();
                 })
                 .then(response => {
                     console.log(response);
@@ -117,6 +118,23 @@ export default {
                     alert('Room deleted')
                     console.log("Successfully deleted")
                 });
+        },
+        WarehouseTemperature()  {
+            this.warehouse.temperature = Math.max.apply(
+                null,this.rooms.map(
+                    function(o)
+                    {return o.temperature;}));
+
+            this.warehouse.status = this.warehouse.temperature < 50 ? 'OK' 
+                                        : this.warehouse.temperature > 50 ? 'MEDIUM' 
+                                        : this.warehouse.temperature >= 100 ? 'HIGH'
+                                        : '-';
+                                        
+            axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse.status)
+                .then(response => {
+                    console.log(response)
+                });
+
         }
     }
 }

@@ -1924,12 +1924,19 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     saveWarehouse: function saveWarehouse() {
-      axios.put('/api/warehouse/' + this.$data.warehouse.id, this.$data.warehouse).then(function (response) {
-        alert('Warehouse updated');
-        console.log(response);
-      })["catch"](function (error) {
-        console.log(error.response);
-      });
+      var _this = this;
+
+      if (this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
+        axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
+          alert('Warehouse updated');
+          console.log(response);
+          _this.warehouse.name = '';
+          _this.warehouse.longitude = '';
+          _this.warehouse.latitude = '';
+        })["catch"](function (error) {
+          console.log(error.response);
+        });
+      }
     }
   }
 });
@@ -2102,9 +2109,9 @@ __webpack_require__.r(__webpack_exports__);
         warehouseid: this.$route.params.warehouseID
       },
       warehouse: {
-        warehouseTemp: '',
-        warehouseStatus: '',
-        warehouseID: this.$route.params.warehouseID
+        temperature: '',
+        status: '',
+        id: this.$route.params.warehouseID
       }
     };
   },
@@ -2115,10 +2122,12 @@ __webpack_require__.r(__webpack_exports__);
     fetchrooms: function fetchrooms() {
       var _this = this;
 
-      fetch('/api/rooms/' + this.warehouse.warehouseID).then(function (response) {
+      fetch('/api/rooms/' + this.warehouse.id).then(function (response) {
         return response.json();
       }).then(function (response) {
         _this.rooms = response.data;
+
+        _this.WarehouseTemperature();
       }).then(function (response) {
         console.log(response);
       });
@@ -2142,6 +2151,15 @@ __webpack_require__.r(__webpack_exports__);
 
         alert('Room deleted');
         console.log("Successfully deleted");
+      });
+    },
+    WarehouseTemperature: function WarehouseTemperature() {
+      this.warehouse.temperature = Math.max.apply(null, this.rooms.map(function (o) {
+        return o.temperature;
+      }));
+      this.warehouse.status = this.warehouse.temperature < 50 ? 'OK' : this.warehouse.temperature > 50 ? 'MEDIUM' : this.warehouse.temperature >= 100 ? 'HIGH' : '-';
+      axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse.status).then(function (response) {
+        console.log(response);
       });
     }
   }
@@ -37896,6 +37914,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("h1", [_vm._v("Rooms")]),
+    _vm._v(" "),
     _c(
       "button",
       {

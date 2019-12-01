@@ -1,7 +1,7 @@
 <template>
     <div>
     
-        <h1>Warehouse</h1>
+        <h1 >Warehouse</h1>
         <form method="GET">
     
             <table class="table">
@@ -85,14 +85,21 @@ export default {
     },
     methods: {
         saveWarehouse() {
-            axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse)
+            if(this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
+
+                axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse)
                 .then(response => {
                     alert('Warehouse updated')
                     console.log(response);
+
+                    this.warehouse.name = '';
+                    this.warehouse.longitude = '';
+                    this.warehouse.latitude = '';
                 })
                 .catch(error => {
                     console.log(error.response)
                 });
+            }
         } 
     }
 }
