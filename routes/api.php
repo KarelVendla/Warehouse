@@ -30,10 +30,10 @@ Route::get('rooms/{warehouseid}', 'RoomsController@show');
 // Create new warehouse/room
 Route::post('room', 'RoomsController@store');
 Route::post('warehouse','WarehouseController@store');
-Route::post('manager', 'ManagerController@update');
 
 //Update warehouse/manager
 Route::put('warehouse/{id}','WarehouseController@update');
+Route::put('manager', 'ManagerController@update');
 
 //Delete warehouse/room
 Route::delete('room/{id}', 'RoomsController@destroy');

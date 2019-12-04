@@ -1913,7 +1913,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      warehouses: [],
       warehouse: {
         id: this.$route.params.warehouseID,
         name: '',
@@ -1923,16 +1922,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    saveWarehouse: function saveWarehouse() {
-      var _this = this;
-
+    SaveWarehouse: function SaveWarehouse() {
       if (this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
         axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
           alert('Warehouse updated');
           console.log(response);
-          _this.warehouse.name = '';
-          _this.warehouse.longitude = '';
-          _this.warehouse.latitude = '';
         })["catch"](function (error) {
           console.log(error.response);
         });
@@ -2000,16 +1994,20 @@ __webpack_require__.r(__webpack_exports__);
     return {
       managers: [],
       manager: {
-        'longitude': '',
-        'latitude': ''
+        longitude: '',
+        latitude: ''
       }
     };
   },
   methods: {
     saveLocation: function saveLocation() {
-      axios.post('/api/manager', this.$data.manager).then(function (response) {
+      var _this = this;
+
+      axios.put('/api/manager', this.$data.manager).then(function (response) {
         alert('Location updated');
         console.log(response);
+        _this.manager.longitude = '';
+        _this.manager.latitude = '';
       })["catch"](function (error) {
         console.log(error.response);
       });
@@ -2098,6 +2096,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2109,9 +2111,12 @@ __webpack_require__.r(__webpack_exports__);
         warehouseid: this.$route.params.warehouseID
       },
       warehouse: {
-        temperature: '',
+        id: this.$route.params.warehouseID,
+        name: '',
+        longitude: '',
+        latitude: '',
         status: '',
-        id: this.$route.params.warehouseID
+        temperature: ''
       }
     };
   },
@@ -2127,7 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         _this.rooms = response.data;
 
-        _this.WarehouseTemperature();
+        _this.SetWarehouseTemperature();
       }).then(function (response) {
         console.log(response);
       });
@@ -2139,6 +2144,10 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
 
         _this2.fetchrooms();
+
+        _this2.SetWarehouseTemperature();
+
+        _this2.room.name = '';
       })["catch"](function (error) {
         console.log(error.response);
       });
@@ -2149,7 +2158,8 @@ __webpack_require__.r(__webpack_exports__);
       axios["delete"]('/api/room/' + id).then(function (response) {
         _this3.fetchrooms();
 
-        alert('Room deleted');
+        _this3.SetWarehouseTemperature();
+
         console.log("Successfully deleted");
       });
     },
@@ -2157,8 +2167,11 @@ __webpack_require__.r(__webpack_exports__);
       this.warehouse.temperature = Math.max.apply(null, this.rooms.map(function (o) {
         return o.temperature;
       }));
-      this.warehouse.status = this.warehouse.temperature < 50 ? 'OK' : this.warehouse.temperature > 50 ? 'MEDIUM' : this.warehouse.temperature >= 100 ? 'HIGH' : '-';
-      axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse.status).then(function (response) {
+      this.warehouse.status = this.warehouse.temperature >= 100 ? "HIGH" : this.warehouse.temperature < 0 ? '-' : this.warehouse.temperature < 50 ? "OK" : this.warehouse.temperature < 100 ? "MEDIUM" : null;
+    },
+    SetWarehouseTemperature: function SetWarehouseTemperature() {
+      this.WarehouseTemperature();
+      axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
         console.log(response);
       });
     }
@@ -37628,7 +37641,7 @@ var render = function() {
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.saveWarehouse()
+                  return _vm.SaveWarehouse()
                 }
               }
             })
@@ -38023,7 +38036,17 @@ var render = function() {
           ])
         ])
       ]
-    )
+    ),
+    _vm._v(" "),
+    _vm.warehouse.temperature > 100
+      ? _c("div", { staticClass: "border border-danger" }, [
+          _c("h4", { staticClass: "text-danger" }, [
+            _vm._v("Status: " + _vm._s(_vm.warehouse.status)),
+            _c("br"),
+            _vm._v("\n            Warehouse is away from your location")
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [

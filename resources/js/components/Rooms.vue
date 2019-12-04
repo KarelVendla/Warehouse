@@ -63,8 +63,12 @@
                 </div>
     
             </div>
-    
+            
         </div>  
+        <div v-if="warehouse.temperature > 100" class="border border-danger">
+                <h4 class="text-danger">Status: {{warehouse.status}}<br>
+                Warehouse is away from your location</h4>
+        </div>
     </div>
 </template>
 
@@ -80,9 +84,12 @@ export default {
                 warehouseid: this.$route.params.warehouseID
             },
             warehouse: {
-                temperature: '',
+                id: this.$route.params.warehouseID,
+                name: '',
+                longitude: '',
+                latitude: '',
                 status: '',
-                id: this.$route.params.warehouseID
+                temperature: ''
             }
         };
     },
@@ -95,7 +102,7 @@ export default {
                 .then(response => response.json())
                 .then(response => {
                     this.rooms = response.data;
-                    this.WarehouseTemperature();
+                    this.SetWarehouseTemperature();
                 })
                 .then(response => {
                     console.log(response);
@@ -106,6 +113,8 @@ export default {
                 .then(response => {
                     console.log(response);
                     this.fetchrooms();
+                    this.SetWarehouseTemperature();
+                    this.room.name = '';
                 })
                 .catch(error => {
                     console.log(error.response);
@@ -115,22 +124,26 @@ export default {
             axios.delete('/api/room/' + id)
                 .then(response => {
                     this.fetchrooms();
-                    alert('Room deleted')
+                    this.SetWarehouseTemperature();
                     console.log("Successfully deleted")
                 });
         },
-        WarehouseTemperature()  {
+        WarehouseTemperature() {
             this.warehouse.temperature = Math.max.apply(
                 null,this.rooms.map(
                     function(o)
                     {return o.temperature;}));
 
-            this.warehouse.status = this.warehouse.temperature < 50 ? 'OK' 
-                                        : this.warehouse.temperature > 50 ? 'MEDIUM' 
-                                        : this.warehouse.temperature >= 100 ? 'HIGH'
-                                        : '-';
-                                        
-            axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse.status)
+            this.warehouse.status = this.warehouse.temperature >= 100 ? "HIGH"
+                                        : this.warehouse.temperature < 0 ? '-'
+                                        : this.warehouse.temperature < 50 ? "OK"
+                                        : this.warehouse.temperature < 100 ? "MEDIUM" : null;
+        },
+        SetWarehouseTemperature()  {  
+            
+            this.WarehouseTemperature();
+
+            axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse)
                 .then(response => {
                     console.log(response)
                 });

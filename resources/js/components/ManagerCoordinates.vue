@@ -47,17 +47,21 @@ export default {
         return {
             managers: [],
             manager: {
-                'longitude': '',
-                'latitude': ''
+                longitude: '',
+                latitude: ''
             }
         };
     },
     methods: {
         saveLocation() {
-            axios.post('/api/manager', this.$data.manager)
+            axios.put('/api/manager', this.$data.manager)
                 .then(response => {
                     alert('Location updated')
                     console.log(response);
+
+
+                    this.manager.longitude = '';
+                    this.manager.latitude = '';
                 })
                 .catch(error => {
                     console.log(error.response)

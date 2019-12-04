@@ -10,7 +10,7 @@
     
                     <td>
     
-                        <input type="submit" @click.prevent="saveWarehouse()" class="btn btn-danger" value="Save"/>
+                        <input type="submit" @click.prevent="SaveWarehouse()" class="btn btn-danger" value="Save"/>
     
                     </td>
     
@@ -74,7 +74,6 @@
 export default {
     data() {
         return {
-            warehouses: [],
             warehouse: {
                 id: this.$route.params.warehouseID,
                 name: '',
@@ -84,17 +83,13 @@ export default {
         };
     },
     methods: {
-        saveWarehouse() {
+        SaveWarehouse() {
             if(this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
 
                 axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse)
                 .then(response => {
                     alert('Warehouse updated')
                     console.log(response);
-
-                    this.warehouse.name = '';
-                    this.warehouse.longitude = '';
-                    this.warehouse.latitude = '';
                 })
                 .catch(error => {
                     console.log(error.response)

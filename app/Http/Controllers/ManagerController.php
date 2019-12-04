@@ -20,27 +20,22 @@ class ManagerController extends Controller
        return ManagerResource::collection($managers);
     }
 
-    //Update warehouse
+    //Update managers coordinates
     public function update(Request $request) {
 
         $manager = Manager::find(1);
-
-        $this->validate($request, [
-            'longitude' => 'required',
-            'latitude' => 'required'
-        ]);
 
         if ($manager == null) {
             
             $manager = new Manager();
             $manager->id = 1;
-            $manager->longitude = $request->longitude;
-            $manager->latitude = $request->latitude;
+            $manager->longitude = $request->filled('longitude') ? $request->input('longitude', $manager->longitude) : $manager->longitude;
+            $manager->latitude = $request->filled('latitude') ? $request->input('latitude', $manager->latitude) : $manager->latitude;
             $manager->save();
 
         } else {
-            $manager->longitude = $request -> longitude;
-            $manager->latitude = $request -> latitude;
+            $manager->longitude = $request->filled('longitude') ? $request->input('longitude', $manager->longitude) : $manager->longitude;
+            $manager->latitude = $request->filled('latitude') ? $request->input('latitude', $manager->latitude) : $manager->latitude;
             $manager->save();
         }
 
