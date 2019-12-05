@@ -24,7 +24,7 @@ Route::get('warehouses', 'WarehouseController@index');
 Route::get('managers','ManagerController@index');
 
 //Get warehouse by id
-Route::get('warehouse/{id}','WarehouseController@show');
+Route::get('warehouses/{id}','WarehouseController@show');
 Route::get('rooms/{warehouseid}', 'RoomsController@show');
 
 // Create new warehouse/room

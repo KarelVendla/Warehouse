@@ -25,8 +25,9 @@ class WarehouseController extends Controller
     public function show(Warehouse $id) {
 
 
-        $warehouse = Warehouse::findOrFail($id)->first()->toArray();
-        return new WarehouseResource($warehouse);
+        $warehouse = warehouse::all()->where('id', $id);
+        //return new RoomResource($warehouseRooms);
+        return WarehouseResource::collection($warehouse);
     }
 
 

@@ -65,10 +65,6 @@
             </div>
             
         </div>  
-        <div v-if="warehouse.temperature > 100" class="border border-danger">
-                <h4 class="text-danger">Status: {{warehouse.status}}<br>
-                Warehouse is away from your location</h4>
-        </div>
     </div>
 </template>
 

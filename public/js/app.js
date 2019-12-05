@@ -1910,9 +1910,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false',
+      ManagerCoordinates: '',
+      Warehouse: '',
       warehouse: {
         id: this.$route.params.warehouseID,
         name: '',
@@ -1921,7 +1927,27 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  created: function created() {
+    this.getLongLatOfManager();
+    this.getWarehouse();
+  },
   methods: {
+    getLongLatOfManager: function getLongLatOfManager() {
+      var _this = this;
+
+      axios.get('/api/managers/').then(function (response) {
+        _this.ManagerCoordinates = response.data;
+        console.log(response);
+      });
+    },
+    getWarehouse: function getWarehouse() {
+      var _this2 = this;
+
+      axios.get('/api/warehouses/' + this.warehouse.id).then(function (response) {
+        _this2.Warehouse = response.data;
+        console.log(response);
+      });
+    },
     SaveWarehouse: function SaveWarehouse() {
       if (this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
         axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
@@ -2026,10 +2052,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
 //
 //
 //
@@ -37629,6 +37651,16 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _vm.warehouse.temperature > 100
+      ? _c("div", { staticClass: "border border-danger" }, [
+          _c("h4", { staticClass: "text-danger" }, [
+            _vm._v("Status: " + _vm._s(_vm.warehouse.status)),
+            _c("br"),
+            _vm._v("\n        Warehouse is away from your location")
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _c("h1", [_vm._v("Warehouse")]),
     _vm._v(" "),
     _c("form", { attrs: { method: "GET" } }, [
@@ -38036,17 +38068,7 @@ var render = function() {
           ])
         ])
       ]
-    ),
-    _vm._v(" "),
-    _vm.warehouse.temperature > 100
-      ? _c("div", { staticClass: "border border-danger" }, [
-          _c("h4", { staticClass: "text-danger" }, [
-            _vm._v("Status: " + _vm._s(_vm.warehouse.status)),
-            _c("br"),
-            _vm._v("\n            Warehouse is away from your location")
-          ])
-        ])
-      : _vm._e()
+    )
   ])
 }
 var staticRenderFns = [
