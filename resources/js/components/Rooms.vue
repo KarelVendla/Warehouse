@@ -70,6 +70,11 @@
 
 <script>
 export default {
+    props: {
+        wareHouses: {
+            type: Number
+        }
+    },
     data() {
         return {
             rooms: [],
@@ -77,10 +82,10 @@ export default {
                 id: '',
                 name: '',
                 temperature: '',
-                warehouseid: this.$route.params.warehouseID
+                warehouseid: this.wareHouses
             },
             warehouse: {
-                id: this.$route.params.warehouseID,
+                id: this.wareHouses,
                 name: '',
                 longitude: '',
                 latitude: '',

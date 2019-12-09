@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1>Warehouses</h1>
-        <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#addNew">Add Warehouse</button>
-        <table class="table-borderless col mx-md-n3">
+        <button type="button" class="btn btn-outline-info m-1" data-toggle="modal" data-target="#addNew">Add Warehouse</button>
+        <table class="table-borderless col mx-md-auto">
             <tr class="">
                 <th>Name</th>
                 <th>Longitude</th>
@@ -10,16 +10,19 @@
                 <th>Status</th>
                 <th></th>
             </tr>
+            
             <tr v-for="warehouse in warehouses" v-bind:key="warehouse.id" class="align-content-center">
                 <td>{{ warehouse.name }}</td>
                 <td>{{ warehouse.longitude }}</td>
                 <td>{{ warehouse.latitude }}</td>
                 <td>{{ warehouse.status }}</td>
-                <td><router-link :to="'/details/' + warehouse.id">Details</router-link></td>
+                <td>   
+                    <button v-on:click="setwarehouseID(warehouse.id)" @click="toggleComponents" class="btn btn-outline-primary" data-toggle="modal" data-target="#showDetails" >Details</button>
+                </td>
             </tr>
         </table>
     
-        <!--Modal-->
+        <!--Add warehouse modal-->
         <div class="modal fade" id="addNew" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -75,16 +78,39 @@
                 </div>
             </div>
         </div>
-    
-    </div>
-</template>
 
+        <!--Warehouse details modal-->
+        <div class="modal fade" id="showDetails" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Warehouse details</h4>
+                    </div>
+                    <div class="modal-body" v-if="toggleComponent">
+                        <detailswarehouse v-bind:wareHouses="this.warehouseID"/>
+                        <rooms v-bind:wareHouses="this.warehouseID"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</template>
 <script>
+
+import detailswarehouse from './Detailswarehouse.vue';
+import Rooms from './Rooms.vue';
+
 export default {
+    components: {
+            detailswarehouse,
+            Rooms
+        },
     data() {
         return {
-            isHidden: 'true',
+            toggleComponent: false,
             warehouses: [],
+            warehouseID: '',
             warehouse: {
                 id: '',
                 name: '',
@@ -101,6 +127,12 @@ export default {
     },
 
     methods: {
+        setwarehouseID(id) {
+            this.warehouseID = id;
+        },
+        toggleComponents() {
+            this.toggleComponent = !this.toggleComponent;
+        },
         fetchWarehouses() {
             fetch('api/warehouses')
                 .then(res => res.json())
@@ -118,13 +150,6 @@ export default {
                     console.log(error.response);
                 });    
         }
-    },
-    computed: {
-        Warning: function() {
-            var Temp = this.warehouses.filter(warehouse => warehouse.status == 'HIGH');
-            this.isHidden = 'false';
-            
-        }
-    },
-};
+    }
+}
 </script>

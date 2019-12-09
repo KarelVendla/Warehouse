@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <div class="container">
         <div v-if="warehouse.temperature > 100" class="border border-danger">
             <h4 class="text-danger">Status: {{warehouse.status}}<br>
             Warehouse is away from your location</h4>
-            </div>
+        </div>
         <h1 >Warehouse</h1>
         <form method="GET">
     
-            <table class="table">
+            <table class="table-borderless col mx-md-auto">
     
                 <tr>
     
@@ -75,13 +75,18 @@
 
 <script>
 export default {
+    props: {
+        wareHouses: {
+            type: Number
+        }
+    },
     data() {
         return {
             url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false',
             ManagerCoordinates: '',
             Warehouse: '',
             warehouse: {
-                id: this.$route.params.warehouseID,
+                id: this.wareHouses,
                 name: '',
                 longitude: '',
                 latitude: ''

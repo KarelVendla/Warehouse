@@ -1,28 +1,27 @@
-import Warehouses from './components/Warehouses';
-import Details from './components/Detailswarehouse';
-import Coordinates from './components/ManagerCoordinates';
-import Rooms from './components/Rooms';
+import Warehouses from "./components/Warehouses";
+import Details from "./components/Detailswarehouse";
+import Coordinates from "./components/ManagerCoordinates";
+import Rooms from "./components/Rooms";
 
 export default {
-    mode: 'history',
+    
+    mode: "history",
 
     routes: [
-
         {
             path: '/',
-
-
             components: {
                 default: Warehouses,
-                detail: Coordinates
+                coordinates: Coordinates
             }
+            
         },
         {
             path: '/details/:warehouseID',
             name: 'Details',
-            components: {
+            component: {
                 default: Details,
-                detail: Rooms
+                rooms: Rooms
             }
         }
     ]
