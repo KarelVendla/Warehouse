@@ -1916,36 +1916,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     wareHouses: {
@@ -2138,28 +2108,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     wareHouses: {
@@ -2254,76 +2202,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Detailswarehouse_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Detailswarehouse.vue */ "./resources/js/components/Detailswarehouse.vue");
-/* harmony import */ var _Rooms_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Rooms.vue */ "./resources/js/components/Rooms.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _modals_WarehouseDetailsModal_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modals/WarehouseDetailsModal.vue */ "./resources/js/modals/WarehouseDetailsModal.vue");
+/* harmony import */ var _modals_AddWarehouseModal_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modals/AddWarehouseModal.vue */ "./resources/js/modals/AddWarehouseModal.vue");
 //
 //
 //
@@ -2358,12 +2238,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    detailswarehouse: _Detailswarehouse_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Rooms: _Rooms_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    addwarehouseModal: _modals_AddWarehouseModal_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    warehousedetailsModal: _modals_WarehouseDetailsModal_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
-      toggleComponent: false,
+      toggleDetail: false,
       warehouses: [],
       warehouseID: '',
       warehouse: {
@@ -2375,16 +2255,15 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  //Do something when component is created
   created: function created() {
     this.fetchWarehouses();
   },
   methods: {
+    toggleDetails: function toggleDetails() {
+      this.toggleDetail = !this.toggleDetail;
+    },
     setwarehouseID: function setwarehouseID(id) {
       this.warehouseID = id;
-    },
-    toggleComponents: function toggleComponents() {
-      this.toggleComponent = !this.toggleComponent;
     },
     fetchWarehouses: function fetchWarehouses() {
       var _this = this;
@@ -2394,18 +2273,135 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         _this.warehouses = res.data;
       });
-    },
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      warehouse: {
+        id: '',
+        name: '',
+        longitude: '',
+        latitude: '',
+        status: ''
+      }
+    };
+  },
+  methods: {
     AddWarehouse: function AddWarehouse() {
-      var _this2 = this;
+      var _this = this;
 
       axios.post('api/warehouse', this.$data.warehouse).then(function (response) {
         console.log(response);
 
-        _this2.fetchWarehouses();
+        _this.fetchWarehouses();
       })["catch"](function (error) {
         console.log(error.response);
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_Detailswarehouse__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Detailswarehouse */ "./resources/js/components/Detailswarehouse.vue");
+/* harmony import */ var _components_Rooms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/Rooms */ "./resources/js/components/Rooms.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    wareHouses: {
+      type: Number
+    }
+  },
+  components: {
+    detailswarehouse: _components_Detailswarehouse__WEBPACK_IMPORTED_MODULE_0__["default"],
+    rooms: _components_Rooms__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  data: function data() {
+    return {
+      warehouseID: this.wareHouses
+    };
   }
 });
 
@@ -38060,7 +38056,7 @@ var render = function() {
       "button",
       {
         staticClass: "btn btn-outline-info",
-        attrs: { "data-toggle": "modal", "data-target": "#addNew" }
+        attrs: { "data-toggle": "modal", "data-target": "#addNewRoom" }
       },
       [_vm._v("Add Room")]
     ),
@@ -38102,7 +38098,10 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "modal fade", attrs: { id: "addNew", role: "dialog" } },
+      {
+        staticClass: "modal fade",
+        attrs: { id: "addNewRoom", role: "dialog" }
+      },
       [
         _c("div", { staticClass: "modal-dialog" }, [
           _c("div", { staticClass: "modal-content" }, [
@@ -38224,251 +38223,86 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h1", [_vm._v("Warehouses")]),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-outline-info m-1",
-        attrs: {
-          type: "button",
-          "data-toggle": "modal",
-          "data-target": "#addNew"
-        }
-      },
-      [_vm._v("Add Warehouse")]
-    ),
-    _vm._v(" "),
-    _c(
-      "table",
-      { staticClass: "table-borderless col mx-md-auto" },
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._l(_vm.warehouses, function(warehouse) {
-          return _c(
-            "tr",
-            { key: warehouse.id, staticClass: "align-content-center" },
-            [
-              _c("td", [_vm._v(_vm._s(warehouse.name))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(warehouse.longitude))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(warehouse.latitude))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(warehouse.status))]),
-              _vm._v(" "),
-              _c("td", [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-outline-primary",
-                    attrs: {
-                      "data-toggle": "modal",
-                      "data-target": "#showDetails"
+  return _c(
+    "div",
+    [
+      _c("h1", [_vm._v("Warehouses")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-outline-info m-1",
+          attrs: { "data-toggle": "modal", "data-target": "#AddNewWarehouse" }
+        },
+        [_vm._v("Add Warehouse")]
+      ),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table-borderless col mx-md-auto" },
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.warehouses, function(warehouse) {
+            return _c(
+              "tr",
+              { key: warehouse.id, staticClass: "align-content-center" },
+              [
+                _c("td", [_vm._v(_vm._s(warehouse.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(warehouse.longitude))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(warehouse.latitude))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(warehouse.status))]),
+                _vm._v(" "),
+                _c("td", [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary",
+                      attrs: {
+                        "data-toggle": "modal",
+                        "data-target": "#ShowWarehouseDetails"
+                      },
+                      on: {
+                        click: [
+                          function($event) {
+                            return _vm.toggleDetails()
+                          },
+                          function($event) {
+                            return _vm.setwarehouseID(warehouse.id)
+                          }
+                        ]
+                      }
                     },
-                    on: {
-                      click: [
-                        function($event) {
-                          return _vm.setwarehouseID(warehouse.id)
-                        },
-                        _vm.toggleComponents
-                      ]
-                    }
-                  },
-                  [_vm._v("Details")]
-                )
-              ])
-            ]
-          )
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "addNew", role: "dialog" } },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("form", { attrs: { method: "GET" } }, [
-                _c("table", { staticClass: "table" }, [
-                  _vm._m(2),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.warehouse.name,
-                            expression: "warehouse.name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Name" },
-                        domProps: { value: _vm.warehouse.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.warehouse, "name", $event.target.value)
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(3),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.number",
-                            value: _vm.warehouse.longitude,
-                            expression: "warehouse.longitude",
-                            modifiers: { number: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "number",
-                          step: "any",
-                          placeholder: "Longitude"
-                        },
-                        domProps: { value: _vm.warehouse.longitude },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.warehouse,
-                              "longitude",
-                              _vm._n($event.target.value)
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(4),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model.number",
-                            value: _vm.warehouse.latitude,
-                            expression: "warehouse.latitude",
-                            modifiers: { number: true }
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "number",
-                          step: "any",
-                          placeholder: "Latitude"
-                        },
-                        domProps: { value: _vm.warehouse.latitude },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.warehouse,
-                              "latitude",
-                              _vm._n($event.target.value)
-                            )
-                          },
-                          blur: function($event) {
-                            return _vm.$forceUpdate()
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        staticClass: "btn btn-danger",
-                        attrs: {
-                          type: "submit",
-                          value: "Save",
-                          "data-dismiss": "modal"
-                        },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.AddWarehouse()
-                          }
-                        }
-                      })
-                    ])
-                  ])
+                    [_vm._v("Details")]
+                  )
                 ])
-              ])
-            ])
-          ])
-        ])
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: { id: "showDetails", role: "dialog" }
-      },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _vm._m(5),
-            _vm._v(" "),
-            _vm.toggleComponent
-              ? _c(
-                  "div",
-                  { staticClass: "modal-body" },
-                  [
-                    _c("detailswarehouse", {
-                      attrs: { wareHouses: this.warehouseID }
-                    }),
-                    _vm._v(" "),
-                    _c("rooms", { attrs: { wareHouses: this.warehouseID } })
-                  ],
-                  1
-                )
-              : _vm._e()
-          ])
-        ])
-      ]
-    )
-  ])
+              ]
+            )
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("addwarehouse-modal"),
+      _vm._v(" "),
+      _vm.toggleDetail
+        ? _c("warehousedetails-modal", {
+            attrs: { wareHouses: this.warehouseID }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", {}, [
+    return _c("tr", [
       _c("th", [_vm._v("Name")]),
       _vm._v(" "),
       _c("th", [_vm._v("Longitude")]),
@@ -38479,7 +38313,178 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th")
     ])
-  },
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: { id: "AddNewWarehouse", role: "dialog" }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "modal-body" }, [
+            _c("form", { attrs: { method: "GET" } }, [
+              _c("table", { staticClass: "table" }, [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.warehouse.name,
+                          expression: "warehouse.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Name" },
+                      domProps: { value: _vm.warehouse.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.warehouse, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(2),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.number",
+                          value: _vm.warehouse.longitude,
+                          expression: "warehouse.longitude",
+                          modifiers: { number: true }
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        step: "any",
+                        placeholder: "Longitude"
+                      },
+                      domProps: { value: _vm.warehouse.longitude },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.warehouse,
+                            "longitude",
+                            _vm._n($event.target.value)
+                          )
+                        },
+                        blur: function($event) {
+                          return _vm.$forceUpdate()
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._m(3),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.number",
+                          value: _vm.warehouse.latitude,
+                          expression: "warehouse.latitude",
+                          modifiers: { number: true }
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "number",
+                        step: "any",
+                        placeholder: "Latitude"
+                      },
+                      domProps: { value: _vm.warehouse.latitude },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.warehouse,
+                            "latitude",
+                            _vm._n($event.target.value)
+                          )
+                        },
+                        blur: function($event) {
+                          return _vm.$forceUpdate()
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("input", {
+                      staticClass: "btn btn-danger",
+                      attrs: {
+                        type: "submit",
+                        value: "Save",
+                        "data-dismiss": "modal"
+                      },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.AddWarehouse()
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38514,13 +38519,73 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [_c("td", [_vm._v("Latitude")])])
-  },
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3&":
+/*!********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3& ***!
+  \********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "modal fade",
+      attrs: { id: "ShowWarehouseDetails", role: "dialog" }
+    },
+    [
+      _c("div", { staticClass: "modal-dialog" }, [
+        _c("div", { staticClass: "modal-content" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "modal-body" },
+            [
+              _c("detailswarehouse", {
+                attrs: { wareHouses: this.warehouseID }
+              }),
+              _vm._v(" "),
+              _c("rooms", { attrs: { wareHouses: this.warehouseID } })
+            ],
+            1
+          )
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Warehouse details")])
+      _c("h4", { staticClass: "modal-title" }, [_vm._v("Warehouse details")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("×")]
+      )
     ])
   }
 ]
@@ -54660,6 +54725,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('warehouses', __webpack_req
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('detailswarehouse', __webpack_require__(/*! ./components/Detailswarehouse.vue */ "./resources/js/components/Detailswarehouse.vue"));
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('location', __webpack_require__(/*! ./components/ManagerCoordinates.vue */ "./resources/js/components/ManagerCoordinates.vue"));
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('rooms', __webpack_require__(/*! ./components/Rooms.vue */ "./resources/js/components/Rooms.vue"));
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('addwarehouseModal', __webpack_require__(/*! ./modals/AddWarehouseModal.vue */ "./resources/js/modals/AddWarehouseModal.vue"));
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('warehousedetailsModal', __webpack_require__(/*! ./modals/WarehouseDetailsModal.vue */ "./resources/js/modals/WarehouseDetailsModal.vue"));
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"](_routes__WEBPACK_IMPORTED_MODULE_3__["default"])
@@ -55028,6 +55095,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Warehouses_vue_vue_type_template_id_e7377a8a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Warehouses_vue_vue_type_template_id_e7377a8a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/modals/AddWarehouseModal.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/modals/AddWarehouseModal.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0& */ "./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0&");
+/* harmony import */ var _AddWarehouseModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddWarehouseModal.vue?vue&type=script&lang=js& */ "./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddWarehouseModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/modals/AddWarehouseModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddWarehouseModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AddWarehouseModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/AddWarehouseModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddWarehouseModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0& ***!
+  \**********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/AddWarehouseModal.vue?vue&type=template&id=1a9ec7a0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddWarehouseModal_vue_vue_type_template_id_1a9ec7a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/modals/WarehouseDetailsModal.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/modals/WarehouseDetailsModal.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3& */ "./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3&");
+/* harmony import */ var _WarehouseDetailsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./WarehouseDetailsModal.vue?vue&type=script&lang=js& */ "./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _WarehouseDetailsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/modals/WarehouseDetailsModal.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseDetailsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./WarehouseDetailsModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseDetailsModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3& ***!
+  \**************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/modals/WarehouseDetailsModal.vue?vue&type=template&id=31ecc2e3&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_WarehouseDetailsModal_vue_vue_type_template_id_31ecc2e3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

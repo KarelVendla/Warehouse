@@ -14,6 +14,8 @@ Vue.component('warehouses', require('./components/Warehouses.vue'));
 Vue.component('detailswarehouse', require('./components/Detailswarehouse.vue'));
 Vue.component('location', require('./components/ManagerCoordinates.vue'));
 Vue.component('rooms', require('./components/Rooms.vue'));
+Vue.component('addwarehouseModal', require('./modals/AddWarehouseModal.vue'));
+Vue.component('warehousedetailsModal', require('./modals/WarehouseDetailsModal.vue'));
 
 const app = new Vue({
     el: '#app',

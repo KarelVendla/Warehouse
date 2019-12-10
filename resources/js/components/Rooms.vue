@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Rooms</h1>
-        <button class="btn btn-outline-info" data-toggle="modal" data-target="#addNew">Add Room</button>
+        <button class="btn btn-outline-info" data-toggle="modal" data-target="#addNewRoom">Add Room</button>
     
         <table>  
             <tr>
@@ -18,52 +18,30 @@
             </tr>
         </table>
 
-        <div class="modal fade" id="addNew" role="dialog">
-    
+        <div class="modal fade" id="addNewRoom" role="dialog">
             <div class="modal-dialog">
-    
                 <div class="modal-content">
-    
                     <div class="modal-header">
-    
                         <h4 class="modal-title">Add Room</h4>
-    
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-    
                     </div>
-    
                     <div class="modal-body">
-    
                         <form method="GET">
-    
-    
-    
                             <table class="table">
-    
                                 <tr>
-    
                                     <td>Name</td>
-    
                                 </tr>
                                 <tr>
                                     <td><input v-model="room.name" type="text" class="form-control" placeholder="Name"></td>
-        
                                 </tr>
-    
                                 <tr>
                                     <td><input type="submit" @click.prevent="AddRoom()" class="btn btn-primary" value="Save" data-dismiss="modal"/></td>
                                 </tr>
-    
                             </table>
-    
                         </form>
-    
                     </div>
-    
                 </div>
-    
             </div>
-            
         </div>  
     </div>
 </template>

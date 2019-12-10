@@ -8,68 +8,38 @@
         <form method="GET">
     
             <table class="table-borderless col mx-md-auto">
-    
                 <tr>
-    
                     <td>
-    
                         <input type="submit" @click.prevent="SaveWarehouse()" class="btn btn-danger" value="Save"/>
-    
                     </td>
-    
                 </tr>
-    
                 <tr>
-    
                     <td>Name</td>
                 </tr>
-    
                 <tr>
-    
                     <td>
     
                         <input v-model="warehouse.name" type="text" class="form-control" placeholder="Name" />
-    
                     </td>
-    
                 </tr>
-    
                 <tr>
-    
                     <td>Longitude</td>
-    
                 </tr>
-    
                 <tr>
-    
                     <td>
-    
                         <input v-model.number="warehouse.longitude" type="number" step="any" class="form-control" placeholder="Longitude" />
-    
                     </td>
-    
                 </tr>
-    
                 <tr>
-    
                     <td>Latitude</td>
-    
                 </tr>
-    
                 <tr>
-    
                     <td>
-    
                         <input v-model.number="warehouse.latitude" type="number" step="any" class="form-control" placeholder="Latitude" />
-    
                     </td>
-    
                 </tr>
-    
             </table>
-    
         </form>
-    
     </div>
 </template>
 
