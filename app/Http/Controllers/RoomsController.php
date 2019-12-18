@@ -35,12 +35,27 @@ class RoomsController extends Controller
 
         $room = new rooms;
 
-        $room->name = $request->name;
-        $room->temperature = rand(21, 125);
+        $room->name = "";
+        $room->temperature = 0;
         $room->warehouseid = $request->warehouseid;
         $room->save();
         return new RoomResource($room);
     
+    }
+
+     //Update room
+     public function update(Request $request) {
+
+        
+        $rooms = $request->all();
+        foreach ($rooms as $roomData) {
+            $room = rooms::findOrFail($roomData['id']);
+            $room->name = isset($roomData['name']) ? $roomData['name'] : $room->name;
+            $room->temperature = isset($roomData['temperature']) ? $roomData['temperature'] : $room->temperature;
+            $room->save();
+        }
+        
+        return ['status'=> 'done'];
     }
 
     public function show($warehouseid) {

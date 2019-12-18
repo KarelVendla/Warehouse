@@ -31,9 +31,13 @@ Route::get('rooms/{warehouseid}', 'RoomsController@show');
 Route::post('room', 'RoomsController@store');
 Route::post('warehouse','WarehouseController@store');
 
+//Get Manager data and Warehous data
+Route::post('openmaps/{warehouseid}', 'Controller@getOpenMapsData');
+
 //Update warehouse/manager
 Route::put('warehouse/{id}','WarehouseController@update');
 Route::put('manager', 'ManagerController@update');
+Route::put('room', 'RoomsController@update');
 
 //Delete warehouse/room
 Route::delete('room/{id}', 'RoomsController@destroy');

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\warehouse;
-use App\rooms;
 use App\Http\Resources\Warehouse as WarehouseResource;
 
 
@@ -22,7 +21,7 @@ class WarehouseController extends Controller
        return WarehouseResource::collection($warehouses);
     }
 
-    public function show(Warehouse $id) {
+    public function show($id) {
 
 
         $warehouse = warehouse::all()->where('id', $id);
@@ -45,7 +44,6 @@ class WarehouseController extends Controller
         }
     
     }
-
 
     //Update warehouse
     public function update(Request $request, $id) {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Warehouses</h1>
-        <button class="btn btn-outline-info m-1" data-toggle="modal" data-target="#AddNewWarehouse">Add Warehouse</button>
+        <button class="btn btn-outline-info m-1" data-toggle="modal" data-target="#AddNewWarehouse" @click="toggleModals('add')">Add Warehouse</button>
         <table class="table-borderless col mx-md-auto">
             <tr>
                 <th>Name</th>
@@ -11,21 +11,21 @@
                 <th></th>
             </tr>
             
-            <tr v-for="warehouse in warehouses" v-bind:key="warehouse.id" class="align-content-center">
+            <tr v-for="warehouse in warehouses" v-bind:key="warehouse.id" class="align-content-center"> 
                 <td>{{ warehouse.name }}</td>
                 <td>{{ warehouse.longitude }}</td>
                 <td>{{ warehouse.latitude }}</td>
                 <td>{{ warehouse.status }}</td>
                 <td>   
-                    <button v-on:click="toggleDetails()" @click="setwarehouseID(warehouse.id)" class="btn btn-outline-primary" data-toggle="modal" data-target="#ShowWarehouseDetails" >Details</button>
+                    <button v-on:click="toggleModals('details')" @click="setwarehouseID(warehouse.id)" class="btn btn-outline-primary" data-toggle="modal" data-target="#ShowWarehouseDetails" >Details</button>
                 </td>
             </tr>
         </table>
         <!--Add warehouse modal-->
-        <addwarehouse-modal/>
+        <addwarehouse-modal @getWarehouses="fetchWarehouses()" @toggleModal="toggleModals('add')" v-if="toggleAdd"/>
 
         <!--Warehouse details modal-->
-        <warehousedetails-modal v-bind:wareHouses="this.warehouseID" v-if="toggleDetail"/>
+        <warehousedetails-modal @toggleModal="toggleModals('details')" :warehouseID="this.warehouseID" v-if="toggleDetail" @getWarehouses="fetchWarehouses()"/>
     </div>
 </template>
 <script>
@@ -40,23 +40,19 @@ export default {
     data() {
         return {
             toggleDetail: false,
+            toggleAdd: false,
             warehouses: [],
-            warehouseID: '',
-            warehouse: {
-                id: '',
-                name: '',
-                longitude: '',
-                latitude: '',
-                status: ''
-            }
+            warehouseID: ''
         };
     },
     created() {
         this.fetchWarehouses();
     },
     methods: {
-        toggleDetails() {
-            this.toggleDetail = !this.toggleDetail;
+        toggleModals(modal) {
+
+            modal == 'add' ? this.toggleAdd = !this.toggleAdd : this.toggleDetail = !this.toggleDetail;
+            
         },
         setwarehouseID(id) {
             this.warehouseID = id;

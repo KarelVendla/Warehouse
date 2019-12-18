@@ -1,10 +1,10 @@
 <template>
-        <div class="modal fade" id="AddNewWarehouse" role="dialog">
+        <div class="modal fade" id="AddNewWarehouse" role="dialog" data-keyboard="false" data-backdrop="static">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Add Warehouse</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>  
+                        <button type="button" class="close" data-dismiss="modal" @click="toggle()">&times;</button>  
                     </div>
                     <div class="modal-body">
                         <form method="GET">
@@ -29,7 +29,7 @@
     
                                 </tr>
                                 <tr>
-                                    <td><input type="submit" @click.prevent="AddWarehouse()" class="btn btn-danger" value="Save" data-dismiss="modal"/></td>
+                                    <td><input type="submit" @click.prevent="AddWarehouse()" class="btn btn-outline-primary" value="Save" data-dismiss="modal"/></td>
                                 </tr>
                             </table>
                         </form>
@@ -57,11 +57,15 @@ export default {
             axios.post('api/warehouse', this.$data.warehouse) 
             .then(response => {
                 console.log(response);
-                this.fetchWarehouses();
+                this.$emit('getWarehouses');
+                this.toggle();
                 })
                 .catch(error => {
                     console.log(error.response);
                 });    
+            },
+            toggle() {
+                this.$emit('toggleModal');
             }
     }
 }

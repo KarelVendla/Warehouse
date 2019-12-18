@@ -39,8 +39,6 @@ class ManagerController extends Controller
             $manager->save();
         }
 
-        
-
         return new ManagerResource($manager);
     }
 

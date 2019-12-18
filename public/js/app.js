@@ -1907,64 +1907,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    wareHouses: {
-      type: Number
-    }
-  },
-  data: function data() {
-    return {
-      url: 'https://routing.openstreetmap.de/routed-car/route/v1/driving/24.7329844855764,59.44288165;26.9726713,59.3572456?overview=false',
-      ManagerCoordinates: '',
-      Warehouse: '',
-      warehouse: {
-        id: this.wareHouses,
-        name: '',
-        longitude: '',
-        latitude: ''
-      }
-    };
-  },
-  created: function created() {
-    this.getLongLatOfManager();
-    this.getWarehouse();
-  },
-  methods: {
-    getLongLatOfManager: function getLongLatOfManager() {
-      var _this = this;
-
-      axios.get('/api/managers/').then(function (response) {
-        _this.ManagerCoordinates = response.data;
-        console.log(response);
-      });
-    },
-    getWarehouse: function getWarehouse() {
-      var _this2 = this;
-
-      axios.get('/api/warehouses/' + this.warehouse.id).then(function (response) {
-        _this2.Warehouse = response.data;
-        console.log(response);
-      });
-    },
-    SaveWarehouse: function SaveWarehouse() {
-      if (this.warehouse.name.length > 0 || this.warehouse.longitude.length > 0 || this.warehouse.latitude.length > 0) {
-        axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
-          alert('Warehouse updated');
-          console.log(response);
-        })["catch"](function (error) {
-          console.log(error.response);
-        });
-      }
+    warehouseData: {
+      type: Object
     }
   }
 });
@@ -2104,88 +2050,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    wareHouses: {
-      type: Number
-    }
+    warehouseData: Object,
+    roomsData: Array
   },
   data: function data() {
-    return {
-      rooms: [],
-      room: {
-        id: '',
-        name: '',
-        temperature: '',
-        warehouseid: this.wareHouses
-      },
-      warehouse: {
-        id: this.wareHouses,
-        name: '',
-        longitude: '',
-        latitude: '',
-        status: '',
-        temperature: ''
-      }
-    };
-  },
-  created: function created() {
-    this.fetchrooms();
+    return {};
   },
   methods: {
-    fetchrooms: function fetchrooms() {
+    AddRoom: function AddRoom() {
       var _this = this;
 
-      fetch('/api/rooms/' + this.warehouse.id).then(function (response) {
-        return response.json();
-      }).then(function (response) {
-        _this.rooms = response.data;
-
-        _this.SetWarehouseTemperature();
+      axios.post("/api/room", {
+        warehouseid: this.warehouseData.id
       }).then(function (response) {
         console.log(response);
-      });
-    },
-    AddRoom: function AddRoom() {
-      var _this2 = this;
 
-      axios.post('/api/room', this.$data.room).then(function (response) {
-        console.log(response);
+        _this.$emit("getRooms");
 
-        _this2.fetchrooms();
-
-        _this2.SetWarehouseTemperature();
-
-        _this2.room.name = '';
+        _this.WarehouseTemperature();
       })["catch"](function (error) {
+        console.log(_this.warehouseData.id);
         console.log(error.response);
       });
     },
     DeleteRoom: function DeleteRoom(id) {
-      var _this3 = this;
+      var _this2 = this;
 
-      axios["delete"]('/api/room/' + id).then(function (response) {
-        _this3.fetchrooms();
-
-        _this3.SetWarehouseTemperature();
-
+      axios["delete"]("/api/room/" + id).then(function (response) {
         console.log("Successfully deleted");
-      });
-    },
-    WarehouseTemperature: function WarehouseTemperature() {
-      this.warehouse.temperature = Math.max.apply(null, this.rooms.map(function (o) {
-        return o.temperature;
-      }));
-      this.warehouse.status = this.warehouse.temperature >= 100 ? "HIGH" : this.warehouse.temperature < 0 ? '-' : this.warehouse.temperature < 50 ? "OK" : this.warehouse.temperature < 100 ? "MEDIUM" : null;
-    },
-    SetWarehouseTemperature: function SetWarehouseTemperature() {
-      this.WarehouseTemperature();
-      axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
-        console.log(response);
+
+        _this2.$emit("getRooms");
       });
     }
   }
@@ -2244,23 +2140,17 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       toggleDetail: false,
+      toggleAdd: false,
       warehouses: [],
-      warehouseID: '',
-      warehouse: {
-        id: '',
-        name: '',
-        longitude: '',
-        latitude: '',
-        status: ''
-      }
+      warehouseID: ''
     };
   },
   created: function created() {
     this.fetchWarehouses();
   },
   methods: {
-    toggleDetails: function toggleDetails() {
-      this.toggleDetail = !this.toggleDetail;
+    toggleModals: function toggleModals(modal) {
+      modal == 'add' ? this.toggleAdd = !this.toggleAdd : this.toggleDetail = !this.toggleDetail;
     },
     setwarehouseID: function setwarehouseID(id) {
       this.warehouseID = id;
@@ -2348,10 +2238,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('api/warehouse', this.$data.warehouse).then(function (response) {
         console.log(response);
 
-        _this.fetchWarehouses();
+        _this.$emit('getWarehouses');
+
+        _this.toggle();
       })["catch"](function (error) {
         console.log(error.response);
       });
+    },
+    toggle: function toggle() {
+      this.$emit('toggleModal');
     }
   }
 });
@@ -2386,11 +2281,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    wareHouses: {
+    warehouseID: {
       type: Number
     }
   },
@@ -2400,8 +2302,95 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      warehouseID: this.wareHouses
+      warehouse: {
+        id: this.warehouseID,
+        name: '',
+        longitude: '',
+        latitude: '',
+        status: '',
+        temperature: ''
+      },
+      rooms: [],
+      distance: ''
     };
+  },
+  mounted: function mounted() {
+    this.fetchrooms();
+    this.WarehouseTemperature();
+    this.SendMapsData();
+  },
+  methods: {
+    SendMapsData: function SendMapsData() {
+      var _this = this;
+
+      axios.post('/api/openmaps/' + this.warehouse.id).then(function (response) {
+        console.log(response.data);
+        _this.distance = response.data;
+        console.log('OpenMaps: Data sent to backend');
+      })["catch"](function (error) {
+        console.log(error);
+        console.log('OpenMaps: Data could not be sent to backend');
+      });
+    },
+    SaveAll: function SaveAll() {
+      this.SaveRooms();
+      this.SaveWarehouse();
+      this.$emit('getWarehouses');
+      this.$emit('toggleModal');
+    },
+    clearWarehouse: function clearWarehouse() {
+      this.warehouse.id = '';
+      this.warehouse.name = '';
+      this.warehouse.longitude = '';
+      this.warehouse.latitude = '';
+      this.warehouse.status = '';
+      this.warehouse.temperature = '';
+      console.log('Warehouse: data cleared');
+    },
+    SaveRooms: function SaveRooms() {
+      var _this2 = this;
+
+      axios.put('/api/room', this.rooms).then(function (response) {
+        console.log(response);
+        console.log('Rooms: data updated with:', _this2.rooms);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log('Rooms: Failed to update');
+      });
+    },
+    SaveWarehouse: function SaveWarehouse() {
+      var _this3 = this;
+
+      this.WarehouseTemperature();
+      axios.put('/api/warehouse/' + this.warehouse.id, this.warehouse).then(function (response) {
+        console.log(response);
+        console.log('Warehouse: Data updated with:', _this3.warehouse);
+      })["catch"](function (error) {
+        console.log(error);
+        console.log('Warehouse: Failed to update');
+      });
+    },
+    fetchrooms: function fetchrooms() {
+      var _this4 = this;
+
+      fetch('/api/rooms/' + this.warehouse.id).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        _this4.rooms = response.data;
+
+        _this4.WarehouseTemperature();
+
+        console.log('Rooms: Data retrieved');
+      }).then(function (response) {
+        console.log(response);
+      });
+    },
+    WarehouseTemperature: function WarehouseTemperature() {
+      this.warehouse.temperature = Math.max.apply(null, this.rooms.map(function (o) {
+        return o.temperature;
+      }));
+      this.warehouse.status = this.warehouse.temperature >= 100 ? "HIGH" : this.warehouse.temperature < 0 ? "-" : this.warehouse.temperature < 50 ? "OK" : this.warehouse.temperature < 100 ? "MEDIUM" : null;
+    }
   }
 });
 
@@ -37742,35 +37731,10 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _vm.warehouse.temperature > 100
-      ? _c("div", { staticClass: "border border-danger" }, [
-          _c("h4", { staticClass: "text-danger" }, [
-            _vm._v("Status: " + _vm._s(_vm.warehouse.status)),
-            _c("br"),
-            _vm._v("\n        Warehouse is away from your location")
-          ])
-        ])
-      : _vm._e(),
-    _vm._v(" "),
     _c("h1", [_vm._v("Warehouse")]),
     _vm._v(" "),
     _c("form", { attrs: { method: "GET" } }, [
       _c("table", { staticClass: "table-borderless col mx-md-auto" }, [
-        _c("tr", [
-          _c("td", [
-            _c("input", {
-              staticClass: "btn btn-danger",
-              attrs: { type: "submit", value: "Save" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.SaveWarehouse()
-                }
-              }
-            })
-          ])
-        ]),
-        _vm._v(" "),
         _vm._m(0),
         _vm._v(" "),
         _c("tr", [
@@ -37780,19 +37744,19 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.warehouse.name,
-                  expression: "warehouse.name"
+                  value: _vm.warehouseData.name,
+                  expression: "warehouseData.name"
                 }
               ],
               staticClass: "form-control",
               attrs: { type: "text", placeholder: "Name" },
-              domProps: { value: _vm.warehouse.name },
+              domProps: { value: _vm.warehouseData.name },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.$set(_vm.warehouse, "name", $event.target.value)
+                  _vm.$set(_vm.warehouseData, "name", $event.target.value)
                 }
               }
             })
@@ -37808,21 +37772,21 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model.number",
-                  value: _vm.warehouse.longitude,
-                  expression: "warehouse.longitude",
+                  value: _vm.warehouseData.longitude,
+                  expression: "warehouseData.longitude",
                   modifiers: { number: true }
                 }
               ],
               staticClass: "form-control",
               attrs: { type: "number", step: "any", placeholder: "Longitude" },
-              domProps: { value: _vm.warehouse.longitude },
+              domProps: { value: _vm.warehouseData.longitude },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
                   _vm.$set(
-                    _vm.warehouse,
+                    _vm.warehouseData,
                     "longitude",
                     _vm._n($event.target.value)
                   )
@@ -37844,21 +37808,21 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model.number",
-                  value: _vm.warehouse.latitude,
-                  expression: "warehouse.latitude",
+                  value: _vm.warehouseData.latitude,
+                  expression: "warehouseData.latitude",
                   modifiers: { number: true }
                 }
               ],
               staticClass: "form-control",
               attrs: { type: "number", step: "any", placeholder: "Latitude" },
-              domProps: { value: _vm.warehouse.latitude },
+              domProps: { value: _vm.warehouseData.latitude },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
                   _vm.$set(
-                    _vm.warehouse,
+                    _vm.warehouseData,
                     "latitude",
                     _vm._n($event.target.value)
                   )
@@ -38056,113 +38020,102 @@ var render = function() {
       "button",
       {
         staticClass: "btn btn-outline-info",
-        attrs: { "data-toggle": "modal", "data-target": "#addNewRoom" }
+        on: {
+          click: function($event) {
+            $event.preventDefault()
+            return _vm.AddRoom()
+          }
+        }
       },
-      [_vm._v("Add Room")]
+      [_vm._v("\n        Add Room\n    ")]
     ),
     _vm._v(" "),
-    _c(
-      "table",
-      [
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._l(_vm.rooms, function(room) {
-          return _c("tr", { key: room.id }, [
-            _c("td", [_vm._v(_vm._s(room.name))]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-center" }, [
-              _vm._v(_vm._s(room.temperature))
-            ]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { type: "submit" },
+    _c("form", { attrs: { method: "GET" } }, [
+      _c(
+        "table",
+        [
+          _vm._m(0),
+          _vm._v(" "),
+          _vm._l(_vm.roomsData, function(room) {
+            return _c("tr", { key: room.id }, [
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: room.name,
+                      expression: "room.name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { placeholder: room.name },
+                  domProps: { value: room.name },
                   on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.DeleteRoom(room.id)
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(room, "name", $event.target.value)
                     }
                   }
-                },
-                [_vm._v("Delete")]
-              )
-            ])
-          ])
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: { id: "addNewRoom", role: "dialog" }
-      },
-      [
-        _c("div", { staticClass: "modal-dialog" }, [
-          _c("div", { staticClass: "modal-content" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c("form", { attrs: { method: "GET" } }, [
-                _c("table", { staticClass: "table" }, [
-                  _vm._m(2),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.room.name,
-                            expression: "room.name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Name" },
-                        domProps: { value: _vm.room.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.room, "name", $event.target.value)
-                          }
-                        }
-                      })
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("input", {
-                        staticClass: "btn btn-primary",
-                        attrs: {
-                          type: "submit",
-                          value: "Save",
-                          "data-dismiss": "modal"
-                        },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.AddRoom()
-                          }
-                        }
-                      })
-                    ])
-                  ])
-                ])
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: room.temperature,
+                      expression: "room.temperature",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { placeholder: room.temperature },
+                  domProps: { value: room.temperature },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(room, "temperature", _vm._n($event.target.value))
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "submit" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.DeleteRoom(room.id)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                        Delete\n                    "
+                    )
+                  ]
+                )
               ])
             ])
-          ])
-        ])
-      ]
-    )
+          })
+        ],
+        2
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -38177,29 +38130,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th")
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Add Room")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", [_c("td", [_vm._v("Name")])])
   }
 ]
 render._withStripped = true
@@ -38232,7 +38162,12 @@ var render = function() {
         "button",
         {
           staticClass: "btn btn-outline-info m-1",
-          attrs: { "data-toggle": "modal", "data-target": "#AddNewWarehouse" }
+          attrs: { "data-toggle": "modal", "data-target": "#AddNewWarehouse" },
+          on: {
+            click: function($event) {
+              return _vm.toggleModals("add")
+            }
+          }
         },
         [_vm._v("Add Warehouse")]
       ),
@@ -38268,7 +38203,7 @@ var render = function() {
                       on: {
                         click: [
                           function($event) {
-                            return _vm.toggleDetails()
+                            return _vm.toggleModals("details")
                           },
                           function($event) {
                             return _vm.setwarehouseID(warehouse.id)
@@ -38286,11 +38221,30 @@ var render = function() {
         2
       ),
       _vm._v(" "),
-      _c("addwarehouse-modal"),
+      _vm.toggleAdd
+        ? _c("addwarehouse-modal", {
+            on: {
+              getWarehouses: function($event) {
+                return _vm.fetchWarehouses()
+              },
+              toggleModal: function($event) {
+                return _vm.toggleModals("add")
+              }
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
       _vm.toggleDetail
         ? _c("warehousedetails-modal", {
-            attrs: { wareHouses: this.warehouseID }
+            attrs: { warehouseID: this.warehouseID },
+            on: {
+              toggleModal: function($event) {
+                return _vm.toggleModals("details")
+              },
+              getWarehouses: function($event) {
+                return _vm.fetchWarehouses()
+              }
+            }
           })
         : _vm._e()
     ],
@@ -38340,17 +38294,38 @@ var render = function() {
     "div",
     {
       staticClass: "modal fade",
-      attrs: { id: "AddNewWarehouse", role: "dialog" }
+      attrs: {
+        id: "AddNewWarehouse",
+        role: "dialog",
+        "data-keyboard": "false",
+        "data-backdrop": "static"
+      }
     },
     [
       _c("div", { staticClass: "modal-dialog" }, [
         _c("div", { staticClass: "modal-content" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", { staticClass: "modal-title" }, [_vm._v("Add Warehouse")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "close",
+                attrs: { type: "button", "data-dismiss": "modal" },
+                on: {
+                  click: function($event) {
+                    return _vm.toggle()
+                  }
+                }
+              },
+              [_vm._v("×")]
+            )
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "modal-body" }, [
             _c("form", { attrs: { method: "GET" } }, [
               _c("table", { staticClass: "table" }, [
-                _vm._m(1),
+                _vm._m(0),
                 _vm._v(" "),
                 _c("tr", [
                   _c("td", [
@@ -38378,7 +38353,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(2),
+                _vm._m(1),
                 _vm._v(" "),
                 _c("tr", [
                   _c("td", [
@@ -38418,7 +38393,7 @@ var render = function() {
                   ])
                 ]),
                 _vm._v(" "),
-                _vm._m(3),
+                _vm._m(2),
                 _vm._v(" "),
                 _c("tr", [
                   _c("td", [
@@ -38461,7 +38436,7 @@ var render = function() {
                 _c("tr", [
                   _c("td", [
                     _c("input", {
-                      staticClass: "btn btn-danger",
+                      staticClass: "btn btn-outline-primary",
                       attrs: {
                         type: "submit",
                         value: "Save",
@@ -38485,23 +38460,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Add Warehouse")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38545,23 +38503,67 @@ var render = function() {
   return _c(
     "div",
     {
-      staticClass: "modal fade",
-      attrs: { id: "ShowWarehouseDetails", role: "dialog" }
+      staticClass: "modal hide fade in",
+      attrs: {
+        id: "ShowWarehouseDetails",
+        "data-keyboard": "false",
+        "data-backdrop": "static",
+        role: "dialog"
+      }
     },
     [
       _c("div", { staticClass: "modal-dialog" }, [
         _c("div", { staticClass: "modal-content" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "modal-header" }, [
+            _c("h4", { staticClass: "modal-title" }, [
+              _vm._v("Warehouse details")
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-primary",
+                attrs: { type: "submit", "data-dismiss": "modal" },
+                on: {
+                  click: function($event) {
+                    return _vm.SaveAll()
+                  }
+                }
+              },
+              [_vm._v("Save")]
+            )
+          ]),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "modal-body" },
             [
+              _vm.warehouse.temperature >= 100
+                ? _c("div", { staticClass: "border border-danger" }, [
+                    _c("h4", { staticClass: "text-danger" }, [
+                      _vm._v("Status: " + _vm._s(_vm.warehouse.status)),
+                      _c("br"),
+                      _vm._v(
+                        "Warehouse is " +
+                          _vm._s(this.distance) +
+                          " KM away from your location"
+                      )
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
               _c("detailswarehouse", {
-                attrs: { wareHouses: this.warehouseID }
+                attrs: { warehouseData: this.warehouse }
               }),
               _vm._v(" "),
-              _c("rooms", { attrs: { wareHouses: this.warehouseID } })
+              _c("rooms", {
+                attrs: { warehouseData: this.warehouse, roomsData: this.rooms },
+                on: {
+                  getRooms: function($event) {
+                    return _vm.fetchrooms()
+                  }
+                }
+              })
             ],
             1
           )
@@ -38570,25 +38572,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("h4", { staticClass: "modal-title" }, [_vm._v("Warehouse details")]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("×")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
