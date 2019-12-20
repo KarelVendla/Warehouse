@@ -11,7 +11,7 @@
                 <th></th>
             </tr>
             
-            <tr v-for="warehouse in warehouses" v-bind:key="warehouse.id" class="align-content-center"> 
+            <tr v-for="warehouse in getWarehouses" v-bind:key="warehouse.id" class="align-content-center"> 
                 <td>{{ warehouse.name }}</td>
                 <td>{{ warehouse.longitude }}</td>
                 <td>{{ warehouse.latitude }}</td>
@@ -22,10 +22,10 @@
             </tr>
         </table>
         <!--Add warehouse modal-->
-        <addwarehouse-modal @getWarehouses="fetchWarehouses()" @toggleModal="toggleModals('add')" v-if="toggleAdd"/>
+        <addwarehouse-modal @getWarehouses="fetchWarehouses()" @toggleModal="toggleModals('add')" v-if="GetToggleAdd"/>
 
         <!--Warehouse details modal-->
-        <warehousedetails-modal @toggleModal="toggleModals('details')" :warehouseID="this.warehouseID" v-if="toggleDetail" @getWarehouses="fetchWarehouses()"/>
+        <warehousedetails-modal @getWarehouses="fetchWarehouses()" @toggleModal="toggleModals('details')" :warehouseID="this.warehouseID" v-if="GetToggleDetail"/>
     </div>
 </template>
 <script>
@@ -39,30 +39,32 @@ export default {
         },
     data() {
         return {
-            toggleDetail: false,
-            toggleAdd: false,
-            warehouses: [],
             warehouseID: ''
         };
     },
-    created() {
+    mounted() {
         this.fetchWarehouses();
     },
     methods: {
         toggleModals(modal) {
-
-            modal == 'add' ? this.toggleAdd = !this.toggleAdd : this.toggleDetail = !this.toggleDetail;
-            
+            this.$store.dispatch('TOGGLEMODALS',modal);
         },
         setwarehouseID(id) {
             this.warehouseID = id;
         },
         fetchWarehouses() {
-            fetch('api/warehouses')
-                .then(res => res.json())
-                .then(res => {
-                    this.warehouses = res.data;
-                });
+            this.$store.dispatch('GET_WAREHOUSES');
+        }
+    },
+    computed: {
+        getWarehouses() {
+            return this.$store.getters.GET_WAREHOUSES;
+        },
+        GetToggleDetail() {
+            return this.$store.getters.GET_TOGGLEDETAIL;
+        },
+        GetToggleAdd() {
+            return this.$store.getters.GET_TOGGLEADD;
         }
     }
 }

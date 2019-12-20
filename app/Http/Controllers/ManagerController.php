@@ -29,8 +29,8 @@ class ManagerController extends Controller
             
             $manager = new Manager();
             $manager->id = 1;
-            $manager->longitude = $request->filled('longitude') ? $request->input('longitude', $manager->longitude) : $manager->longitude;
-            $manager->latitude = $request->filled('latitude') ? $request->input('latitude', $manager->latitude) : $manager->latitude;
+            $manager->longitude = $request->filled('longitude') ? $request->input('longitude', $manager->longitude) : 0;
+            $manager->latitude = $request->filled('latitude') ? $request->input('latitude', $manager->latitude) : 0;
             $manager->save();
 
         } else {

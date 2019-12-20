@@ -7,10 +7,11 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 use App\warehouse;
 use App\Manager;
-use Illuminate\Http\Request;
 
 class Controller extends BaseController
 {
@@ -18,19 +19,31 @@ class Controller extends BaseController
 
     public function getOpenMapsData($warehouseid)
     {
+        $client = new Client([
+            'base_uri' => 'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
+        ]);
+
         $managerLat = urlencode(Manager::find(1)->latitude);
         $managerLong = urlencode(Manager::find(1)->longitude);
 
         $warehouseLat = urlencode(warehouse::find($warehouseid)->latitude);
         $warehouseLong = urlencode(warehouse::find($warehouseid)->longitude);
 
-        $openMapsUrl = "https://routing.openstreetmap.de/routed-car/route/v1/driving/$warehouseLat,$warehouseLong;$managerLat,$managerLong";
+        $openMapsParameters = "$warehouseLat,$warehouseLong;$managerLat,$managerLong";
 
-        $openMapsData = file_get_contents($openMapsUrl);
-        $openMapsDataJson = json_decode($openMapsData, true);
+        try {
+            
+            $response = $client->request('GET',$openMapsParameters);
 
-        $distance = round($openMapsDataJson['routes'][0]['legs'][0]['distance'] / 1000);
+            $body = $response->getBody();
 
-        return $distance;
+            $openMapsDataJson = json_decode($body, true);
+
+            $distance = round($openMapsDataJson['routes'][0]['legs'][0]['distance'] / 1000);
+            return $distance;
+
+        } catch (RequestException $e) {
+            return ['Invalid Coordinates'];
+        }
     }
 }

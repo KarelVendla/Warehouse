@@ -54,15 +54,8 @@ export default {
     },
     methods: {
         AddWarehouse() {
-            axios.post('api/warehouse', this.$data.warehouse) 
-            .then(response => {
-                console.log(response);
-                this.$emit('getWarehouses');
-                this.toggle();
-                })
-                .catch(error => {
-                    console.log(error.response);
-                });    
+                console.log('Warehouse data', this.warehouse);
+                this.$store.dispatch('ADD_WAREHOUSE', this.warehouse);
             },
             toggle() {
                 this.$emit('toggleModal');

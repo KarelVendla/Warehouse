@@ -15,14 +15,6 @@ export default {
                 coordinates: Coordinates
             }
             
-        },
-        {
-            path: '/details/:warehouseID',
-            name: 'Details',
-            component: {
-                default: Details,
-                rooms: Rooms
-            }
         }
     ]
 };

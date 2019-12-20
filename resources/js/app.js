@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 import routes from './routes';
+import store from './store';
 
 require('./bootstrap');
 window.Vue = require('vue');
@@ -19,5 +20,6 @@ Vue.component('warehousedetailsModal', require('./modals/WarehouseDetailsModal.v
 
 const app = new Vue({
     el: '#app',
-    router: new VueRouter(routes)
+    router: new VueRouter(routes),
+    store: new Vuex.Store(store)
 });

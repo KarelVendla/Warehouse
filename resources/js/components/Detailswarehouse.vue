@@ -10,7 +10,7 @@
                 <tr>
                     <td>
     
-                        <input v-model="warehouseData.name" type="text" class="form-control" placeholder="Name" />
+                        <input v-model="getWarehouse.name" type="text" class="form-control" placeholder="Name"/>
                     </td>
                 </tr>
                 <tr>
@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input v-model.number="warehouseData.longitude" type="number" step="any" class="form-control" placeholder="Longitude" />
+                        <input v-model.number="getWarehouse.longitude" type="number" step="any" class="form-control" placeholder="Longitude" />
                     </td>
                 </tr>
                 <tr>
@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input v-model.number="warehouseData.latitude" type="number" step="any" class="form-control" placeholder="Latitude" />
+                        <input v-model.number="getWarehouse.latitude" type="number" step="any" class="form-control" placeholder="Latitude" />
                     </td>
                 </tr>
             </table>
@@ -36,9 +36,9 @@
 
 <script>
 export default {
-    props: {
-        warehouseData: {
-            type: Object
+    computed: {
+        getWarehouse() {
+            return this.$store.getters.GET_WAREHOUSE
         }
     }
 }

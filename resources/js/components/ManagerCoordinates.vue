@@ -1,6 +1,5 @@
 <template>
     <div id="manager" class="container">
-    
         <h1>My Location</h1>
         <form method="GET">
     
@@ -12,7 +11,7 @@
     
                 <tr>
     
-                    <td><input v-model.number="manager.longitude" type="number" step="any" class="form-control" placeholder="Add longitude"></td>
+                    <td><input v-model.number="getManager.longitude" type="number" step="any" class="form-control" placeholder="Add longitude"></td>
     
                 </tr>
     
@@ -24,7 +23,7 @@
     
                 <tr>
     
-                    <td><input v-model.number="manager.latitude" type="number" step="any" class="form-control" placeholder="Add latitude"></td>
+                    <td><input v-model.number="getManager.latitude" type="number" step="any" class="form-control" placeholder="Add latitude"></td>
     
                 </tr>
     
@@ -43,31 +42,21 @@
 
 <script>
 export default {
-    data() {
-        return {
-            managers: [],
-            manager: {
-                longitude: '',
-                latitude: ''
-            }
-        };
+    mounted() {
+        this.fetchLocation();
     },
     methods: {
         saveLocation() {
-            axios.put('/api/manager', this.$data.manager)
-                .then(response => {
-                    alert('Location updated')
-                    console.log(response);
-
-
-                    this.manager.longitude = '';
-                    this.manager.latitude = '';
-                })
-                .catch(error => {
-                    console.log(error.response)
-                });
+            this.$store.dispatch('UPDATE_MANAGERLOCATION');
+        },
+        fetchLocation() {
+            this.$store.dispatch('GET_MANAGERLOCATION')
+        },
+    },
+    computed: {
+        getManager() {
+            return this.$store.getters.GET_MANAGER
         }
     }
-
 }
 </script>

@@ -14,7 +14,3 @@
 Route::get('/', function () {
     return view('warehouse');
 });
-
-Route::get('/details', function () {
-    return view('warehouse');
-});

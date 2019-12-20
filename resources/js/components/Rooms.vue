@@ -13,19 +13,18 @@
 
                     <th></th>
                 </tr>
-                <tr v-for="room in roomsData" :key="room.id">
+                <!--ID becomes undefined when there are no rooms-->
+                <tr v-for="room in getRooms" :key="room.id">
                     <td>
                         <input
                             class="form-control"
                             v-model="room.name"
-                            :placeholder="room.name"
                         />
                     </td>
                     <td>
                         <input
                             class="form-control"
                             v-model.number="room.temperature"
-                            :placeholder="room.temperature"
                         />
                     </td>
                     <td>
@@ -44,33 +43,21 @@
 
 <script>
 export default {
-    props: {
-        warehouseData: Object,
-        roomsData: Array
-    },
-    data() {
-        return {};
-    },
+    //Pass down as prop or use computed ?
     methods: {
-        AddRoom() {
-            axios.post("/api/room", {
-                    warehouseid: this.warehouseData.id
-                })
-                .then(response => {
-                    console.log(response);
-                    this.$emit("getRooms");
-                    this.WarehouseTemperature();
-                })
-                .catch(error => {
-                    console.log(this.warehouseData.id);
-                    console.log(error.response);
-                });
+       async AddRoom() {
+        await this.$store.dispatch('ADD_ROOM', this.getWarehouse.id);
         },
         DeleteRoom(id) {
-            axios.delete("/api/room/" + id).then(response => {
-                console.log("Successfully deleted");
-                this.$emit("getRooms");
-            });
+            this.$store.dispatch('DELETE_ROOM', id);
+        }
+    },
+    computed: {
+        getWarehouse() {
+            return this.$store.getters.GET_WAREHOUSE
+        },
+        getRooms() {
+            return this.$store.getters.GET_ROOMS
         }
     }
 };

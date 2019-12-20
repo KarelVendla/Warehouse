@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import Warehouses from "./Warehouses.vue";
+import warehouses from "./Warehouses.vue";
 import location from "./ManagerCoordinates.vue";
 
 export default {
   components: {
-    Warehouses,
+    warehouses,
     location
   }
 };
