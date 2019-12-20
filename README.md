@@ -11,4 +11,3 @@ Test task for learning Laravel + Vue combination (Unfinished)
 * Using <a href="https://github.com/axios/axios">axios</a> for requests (front-end)
 * Using <a href="https://vuex.vuejs.org/">Vuex</a> for state management
 * Using <a href="http://docs.guzzlephp.org/en/stable/overview.html">Guzzle</a> for requests (back-end)
-#}
